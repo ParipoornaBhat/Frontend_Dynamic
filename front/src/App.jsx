@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import NavBar from './components/navbar2';
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Footer from './components/Footer'; // Ensure correct casing
+import Footer from './components/footer1.jsx'; // Ensure correct casing
 import LoadingScreen from './components/LoadingScreen'; // Import the LoadingScreen component
 import Profile from './pages/general/Profile.jsx';
 import ChangePassword from './pages/general/ChangePassword';
