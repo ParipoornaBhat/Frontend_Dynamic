@@ -1,0 +1,423 @@
+/* Base container for the profile */
+.manageuser-profile-container {
+    display: flex;
+    position: fixed;
+    top: 0;
+    right: -100%; /* Initially hidden */
+    width: 325px;
+    height: 680px;
+    background-color: #ffffff; /* White background */
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+    transition: right 0.75s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto; /* Allow scrolling if content overflows */
+    padding-top: 0px; /* Space for the close button */
+    padding-bottom: 0px; /* Space for the close button */
+    border-radius: 18px;
+    margin-top: 90px;
+    margin-right: 1vh;
+    margin-bottom: 1vh;
+    padding-right: 0px;
+    border: 2px solid black;
+    box-sizing: border-box;
+    /* Add a gradient background */
+    background: linear-gradient(
+      45deg,
+      #d1f2f6 0%,
+      #f0fafc 50%,
+      #ffffff 50%,
+      #ffffff 100%
+    );
+  }
+  
+  /* Show the panel when it's visible */
+  .manageuser-profile-container.visible {
+    right: 0;
+    /* Add a gradient background */
+  }
+  
+  /* Close button styling */
+  .manageuser-profile-close-button {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #00bcd4;
+    transition: color 0.2s ease-in-out;
+  
+    /* Add a hover effect */
+    color: #0056b3; /* Darker blue */
+  }
+  
+  .manageuser-profile-close-button:hover {
+    color: #0056b3; /* Darker blue on hover */
+  }
+  
+  /* Profile content styling */
+  .manageuser-profile-content {
+    padding: 20px;
+    width: 100%;
+    /* Add a gradient background */
+    background: linear-gradient(
+      45deg,
+      #1ab1a9 0%,
+      #f0fafc 50%,
+      #ffffff 50%,
+      #ffffff 100%
+    );
+  
+    /* Add a subtle shadow */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px; /* Rounded corners */
+  }
+  
+  /* Profile picture container */
+  .manageuser-profile-picture-container {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  
+  .manageuser-profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; /* Circular picture */
+    object-fit: cover;
+    border: 3px solid #00bcd4; /* Aqua border */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin: 0 auto;
+    display: block;
+    margin-bottom: 10px;
+    margin-top: 10px;
+  }
+  
+  .manageuser-profile-picture:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0 4px 10px rgba(0, 188, 212, 0.5); /* Aqua glow */
+  }
+  
+  /* Profile details */
+  .manageuser-profile-details h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #000000; /* Blue text */
+    text-align: center;
+  }
+  
+  .manageuser-profile-details p {
+    font-size: 1rem;
+    margin: 5px 0;
+    color: #333; /* Dark gray text */
+  }
+  
+  .manageuser-profile-details strong {
+    color: #000000;
+  }
+  
+  /* Buttons and hover effects */
+  .manageuser-profile-change-password-button {
+    padding: 10px 15px;
+    border: 1px solid #00bcd4; /* Aqua border */
+    background-color: white;
+    color: #00bcd4;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+  
+    /* Add a subtle shadow */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 200px;
+    text-align: center;
+  }
+  
+  .manageuser-profile-change-password-button:hover {
+    background-color: #00bcd4; /* Aqua fill */
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 188, 212, 0.5); /* Glow effect */
+  }
+  
+  /* Notification settings */
+  .manageuser-profile-notification-settings {
+    margin-top: 10px;
+  }
+  
+  .manageuser-profile-notification-settings h3 {
+    font-size: 1.2rem;
+    color: #000000;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  .manageuser-profile-notification-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f0fafc; /* Light blue background */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .manageuser-profile-notification-toggle label {
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .manageuser-profile-notification-toggle input[type="checkbox"] {
+    cursor: pointer;
+    accent-color: #00bcd4; /* Aqua color */
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* Add subtle hover effect for labels */
+  .manageuser-profile-notification-toggle label:hover {
+    color: #00bcd4; /* Aqua on hover */
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .manageuser-profile-edit-icon {
+    position: absolute;
+    top: 15px;
+    right: 50px;
+    font-size: 20px;
+    color: #00bcd4;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+  }
+  
+  .manageuser-profile-edit-icon:hover {
+    color: #0056b3; /* Darker blue on hover */
+  }
+  /* Profile Image Container */
+.profile-image-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  margin-bottom: 10px;
+  max-width: 325px;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: all 0.3s ease-in-out;
+}
+
+.profile-image-overlay-edit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.profile-image-overlay-edit:hover {
+  opacity: 1;
+}
+
+/* Profile Name Row */
+.profile-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.profile-name-input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  width: 150px;
+  transition: border 0.3s ease;
+}
+
+.profile-name-input:last-child {
+  width: 50px; /* Make last name input narrower */
+}
+
+.profile-name-input:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+}
+
+/* Profile Details Section */
+.profile-details-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width:250px;
+  margin-bottom: 20px;
+}
+
+/* Profile Details Row */
+.profile-details-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-detail-label {
+  font-weight: bold;
+  width: 120px;
+}
+
+.profile-detail-input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  flex: 1;
+  transition: border 0.3s ease;
+}
+
+.profile-detail-input:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+}
+
+/* Profile Address Form */
+.profile-address-form {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.profile-address-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-address-label {
+  font-weight: bold;
+  width: 120px;
+}
+
+.profile-address-input {
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  flex: 1;
+  transition: border 0.3s ease;
+}
+
+.profile-address-input:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.6);
+}
+
+/* Profile Actions (Save, Cancel) */
+.profile-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.profile-save-button,
+.profile-cancel-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.profile-save-button:hover,
+.profile-cancel-button:hover {
+  background-color: #45a049;
+}
+
+.profile-cancel-button {
+  background-color: #f44336;
+}
+
+.profile-cancel-button:hover {
+  background-color: #e53935;
+}
+
+/* Button Transitions */
+.profile-button {
+  transition: transform 0.3s ease;
+}
+
+.profile-button:hover {
+  transform: scale(1.05);
+}
+
+.profile-button:focus {
+  outline: none;
+}
+
+.profile-button:active {
+  transform: scale(0.98);
+}
+
+/* Responsive Design for Small Screens */
+@media (max-width: 768px) {
+  .profile-details-section {
+    gap: 15px;
+  }
+
+  .profile-name-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-name-input,
+  .profile-detail-input,
+  .profile-address-input {
+    width: 100%; /* Ensure inputs fill their container on smaller screens */
+  }
+
+  .profile-image-container {
+    width: 100px;
+    height: 100px;
+    margin: 10px auto;
+  }
+
+  .profile-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .profile-save-button,
+  .profile-cancel-button {
+    width: 100%;
+  }
+}

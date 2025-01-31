@@ -1,0 +1,281 @@
+/* Base container for the profile */
+.profile-container {
+  display:flex;
+  position: fixed;
+  top: 0;
+  right: -100%; /* Initially hidden */
+  width:325px;
+  height: 680px;
+  background-color: #ffffff; /* White background */
+  box-shadow: -2px 0 15px rgba(0, 0, 0, 0.15); /* Enhanced shadow */
+  transition: right 0.75s ease-in-out;
+  z-index: 1000;
+  overflow-y: auto; /* Allow scrolling if content overflows */
+  padding-top: 0px; /* Space for the close button */
+  padding-bottom: 0px; /* Space for the close button */
+  border-radius: 18px;
+  margin-top: 90px;
+  margin-right: 1vh;
+  margin-bottom: 1vh;
+  padding-right: 0px;
+  border:2px solid black;
+  box-sizing: border-box;
+  /* Add a gradient background */
+  background: linear-gradient(
+    45deg,
+    #d1f2f6 0%,
+    #f0fafc 50%,
+    #ffffff 50%,
+    #ffffff 100%
+
+
+  );
+}
+
+/* Show the panel when it's visible */
+.profile-container.visible {
+  right: 0;
+
+  /* Add a gradient background */
+
+  
+}
+
+/* Close button styling */
+.close-button {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #00bcd4;
+  transition: color 0.2s ease-in-out;
+
+  /* Add a hover effect */
+  color: #0056b3; /* Darker blue */
+
+
+
+
+
+}
+
+.close-button:hover {
+  color: #0056b3; /* Darker blue on hover */
+ 
+
+
+
+
+
+}
+
+/* Profile content styling */
+.profile-content {
+  padding: 20px;
+  width:100%;
+  /* Add a gradient background */
+  background: linear-gradient(
+    45deg,
+    #1ab1a9 0%,
+    #f0fafc 50%,
+    #ffffff 50%,
+    #ffffff 100%
+  );
+
+  /* Add a subtle shadow */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px; /* Rounded corners */
+
+
+
+
+
+}
+
+/* Profile picture container */
+.profile-picture-container {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+}
+
+.profile-picture {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%; /* Circular picture */
+  object-fit: cover;
+  border: 3px solid #00bcd4; /* Aqua border */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  margin: 0 auto;
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 10px;
+
+}
+
+.profile-picture:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+  box-shadow: 0 4px 10px rgba(0, 188, 212, 0.5); /* Aqua glow */
+}
+
+/* Profile details */
+.profile-details h2 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #000000; /* Blue text */
+  text-align: center;
+
+}
+
+.profile-details p {
+  font-size: 1rem;
+  margin: 5px 0;
+  color: #333; /* Dark gray text */
+  
+}
+
+.profile-details strong {
+  color: #000000;
+  
+}
+
+/* Buttons and hover effects */
+.change-password-button {
+  padding: 10px 15px;
+  border: 1px solid #00bcd4; /* Aqua border */
+  background-color: white;
+  color: #00bcd4;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+
+  /* Add a subtle shadow */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  display: block;
+  margin: 0 auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 200px;
+  text-align: center;
+}
+
+.change-password-button:hover {
+  background-color: #00bcd4; /* Aqua fill */
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 188, 212, 0.5); /* Glow effect */
+
+}
+
+/* Notification settings */
+.notification-settings {
+  margin-top: 10px;
+  
+
+
+
+  
+}
+
+.notification-settings h3 {
+  font-size: 1.2rem;
+  color: #000000;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.notification-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f0fafc; /* Light blue background */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  transition: background-color 0.3s, box-shadow 0.3s;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+
+.notification-toggle label {
+  font-size: 1rem;
+  color: #333;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  
+}
+
+.notification-toggle input[type="checkbox"] {
+  cursor: pointer;
+  accent-color: #00bcd4; /* Aqua color */
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  
+}
+
+/* Add subtle hover effect for labels */
+.notification-toggle label:hover {
+  color: #00bcd4; /* Aqua on hover */
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+
+}
+.edit-icon {
+  position: absolute;
+  top: 15px;
+  right: 50px;
+  font-size: 20px;
+  color: #00bcd4;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.edit-icon:hover {
+  color: #0056b3; /* Darker blue on hover */
+}
+/* Styling for the address form container */
+.profile-address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Styling for the labels */
+.profile-address-label {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+/* Styling for the address input fields */
+.profile-address-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+/* Focus effect on input fields */
+.profile-address-input:focus {
+  border-color: #007bff;
+  outline: none;
+}

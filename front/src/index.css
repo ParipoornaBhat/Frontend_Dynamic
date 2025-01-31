@@ -1,0 +1,21 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f1f8e9; /* Light Green background */
+  animation: fadeIn 2s ease-in; /* Applying the fade-in animation */
+  font-family: BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0; /* Start with opacity 0 */
+  }
+  100% {
+    opacity: 1; /* End with opacity 1 */
+  }
+}
+.page-container {
+  margin: 0; /* 5px margin for all content */
+  padding-top: 40px; /* Ensure no padding added here */
+}

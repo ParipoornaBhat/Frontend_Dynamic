@@ -1,0 +1,171 @@
+.login-page {
+  width: 100%;
+  padding: 0px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+
+
+
+
+.login-container {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 02px 5px 10px rgb(0, 0, 0);
+  width: 300px;
+  padding: 40px;
+  font-family: 'Sarah Cadigan-Fried', sans-serif; /* Added here */
+}
+
+.login-form h2 {
+  margin-top: 0;
+  margin-bottom: 40px;
+  font-size: 4vh;
+  text-align: center;
+
+  color: #00796b;
+}
+.login-errors {
+  margin-bottom: 10px;
+}
+
+/* Single Error Message */
+.login-error {
+  color: #ff0000;
+  padding: 0px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  font-size: 20px;
+  text-align: center;
+  text-shadow: 3px 3px 5px rgba(255, 255, 255, 0.9),/* Highlight layer */
+  -3px -3px 4px rgba(255, 255, 255, 0.8),  /* Depth shadow */
+   4px 4px 6px rgb(255, 0, 0);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.login-label {
+  display: block;
+  margin-bottom: 30px;
+  font-weight: bold;
+  color: #00796b;
+}
+
+/* Input Fields */
+.login-input {
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f1f8e9;
+  box-sizing: border-box;
+}
+.login-password-container {
+  position: relative;
+}
+
+.login-input {
+  width: 100%;
+  padding-right: 40px; /* Adjust padding to make space for the icon */
+}
+
+.login-password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #888; /* Adjust color if needed */
+}
+
+.login-password-toggle i {
+  font-size: 18px; /* Adjust size of the icon */
+}
+
+
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #00796b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+  font-family: 'Sarah Cadigan-Fried', sans-serif; /* Added here */
+}
+
+.login-button:hover {
+  background-color: #004d40;
+}
+
+.forgot-password {
+  text-align: center;
+  margin-top: 10px;
+  font-family: 'Sarah Cadigan-Fried', sans-serif; /* Added here */
+  justify-content: center;
+}
+
+.forgot-password a {
+  color: #00796b;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Sarah Cadigan-Fried', sans-serif; /* Added here */
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .login-page {
+      padding: 10px;
+  }
+
+  .login-container {
+      padding: 20px;
+  }
+
+  .login-form h2 {
+      font-size: 22px;
+  }
+
+}
+.additional-options {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.forgot-password-link,
+.signup-link {
+  color: #00796b; /* Aqua-like color */
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 5px;
+  justify-content: center;
+  font-size: 15px;
+  align-content: center;
+  
+}
+
+.forgot-password-link:hover,
+.signup-link:hover {
+  color: #00796b; /* Darker shade for hover effect */
+  text-decoration: underline;
+}
+
+.separator {
+  color: #00796b; /* Grey color for the separator */
+  font-weight: normal;
+}

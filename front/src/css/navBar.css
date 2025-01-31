@@ -1,0 +1,267 @@
+/* General Navbar Styles */
+nav-con{
+
+    display: flex;
+    justify-content: center; /* Center the navbar horizontally */
+}
+.navbar {
+  position: fixed;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  /* Adjust width to account for 5px left and right margin */
+  padding: 0.5rem 1rem;
+  background-color: #1AB1AA; /* Light aqua background */
+  box-shadow: 5px 4px 8px #484949;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-top: 5px solid #030303;
+  border-bottom: 3px solid #030303; /* Slightly lighter aqua border */
+
+  animation: fadeIn 0.5s ease-in; /* Applying the fade-in animation */
+  margin-left: auto;
+  
+  margin-right: 35px;
+  max-width: var(--max-width);
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+  width: calc(100%);
+  height:64px;
+  
+}
+
+/* Define the fade-in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0; /* Start with opacity 0 */
+  }
+  100% {
+    opacity: 1; /* End with opacity 1 */
+  }
+}
+
+
+/* Hover effect for Navbar */
+.navbar a {
+  text-decoration: none;
+  color: #ffffff; /* Dark green text */
+ 
+  transition: color 0.3s ease, background-color 0.3s ease;
+  font-size: 16px; /* Larger font size for navigation links */
+  /* Apply font stack globally */
+  font-family: BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border-radius: 5px;
+  font-family: 'Arial, sans-serif';
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Navbar link hover */
+.navbar a:hover {
+  color: #003122; /* Darker text color on hover */
+   /* Slightly darker aqua on hover */
+  border-radius: 5px;
+  margin-left: 0.5rem;
+}
+
+/* Logo Section */
+/* Logo Section */
+.navbar-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1rem;
+  pointer-events: none; /* Prevent any interaction with the container */
+}
+
+.navbar-logo-container:hover {
+  background-color: transparent; /* Ensure no background change on hover */
+  cursor: default; /* Ensure the cursor remains default */
+}
+
+.navbar-logo-image {
+  height: 5vh; /* Adjusted logo image size */
+  
+  width: auto;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  pointer-events: auto; /* Allow interaction with the image itself */
+}
+
+/* Ensure no hover effect on the parent container */
+.navbar-logo-container:hover,
+.navbar-logo-image:hover {
+  background-color: transparent !important; /* Force the background to stay transparent */
+  cursor: default !important; /* Ensure the cursor does not change */
+}
+
+
+/* Logo text */
+.navbar-logo-text {
+  font-size: 22rem; /* Small logo text */
+  color: #004d40; /* Dark green */
+  font-weight: bold;
+  font-family: 'Arial, sans-serif';
+  margin: 0;
+  padding: 0;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  
+}
+
+/* Hamburger Icon */
+.navbar-hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  z-index: 100;
+}
+
+.navbar-hamburger .navbar-line {
+  height: 2px;
+  width: 20px;
+  background-color: #000000; /* Dark green */
+  margin: 3px 0;
+  transition: background-color 0.3s ease;
+  z-index: 500;
+}
+
+/* Navbar Links */
+.navbar-links {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  margin-right: 1rem;
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;  z-index: 500;
+}
+
+.navbar-links li {
+  margin: 0 0.75rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;  z-index: 500;
+}
+
+.navbar-links a {
+  font-size: 1.2rem; /* Larger font size for links */
+  font-family: BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  color: #ffffff; /* Dark green */
+  transition: color 0.3s ease, background-color 0.3s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;  z-index: 500;
+}
+
+.navbar-links a:hover {
+  color: #193325; /* Darker text color on hover */
+  /* Slightly darker aqua on hover */
+  border-radius: 5px;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;  z-index: 500;
+}
+
+/* Mobile View */
+/* Mobile View */
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none; /* Default state is hidden */
+    flex-direction: column;
+    width: 60%; /* Reduced width */
+    background-color: #1ab1a9; /* Mobile background */
+    position: absolute;
+    top: 64px; /* Below the navbar */
+    left: 5%; /* Center it horizontally */
+    padding: 0.5rem; /* Reduced padding */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 10px 10px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .navbar-hamburger {
+    display: flex; /* Show hamburger on small screens */
+  }
+
+  .navbar-links-active {
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
+    width: 60%; /* Reduced width */
+    background-color: #1ab1a9; /* Match the mobile background color */
+    position: absolute;
+    top: 72px; /* Align below the navbar */
+    left: 35%; /* Center it horizontally */
+    padding: 0.5rem; /* Reduced padding */
+    box-shadow: 5px 4px 15px rgb(0, 0, 0);
+    border-radius: 0 0 10px 10px;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid black;
+  }
+
+  .navbar-links li {
+    margin: 1rem 0; /* Adjust margins for better spacing */
+    position: relative; /* Required for absolute positioning of the line */
+    text-align: center; /* Center the content and line */
+  }
+
+  .navbar-links li::after {
+    content: ""; /* Empty content for the line */
+    display: block;
+    position: absolute;
+    transform: translateX(-50%);
+    bottom: -5px; /* Place the line slightly below the text */
+    left: 50%; /* Start at the horizontal center */
+     /* Center-align the line */
+    width: 80px; /* Fixed width for all lines */
+    height: 2px; /* Line thickness */
+    background-color: #ffffff; /* Line color */
+    opacity: 0.7; /* Slightly transparent */
+  }
+
+  .navbar-links li:last-child::after {
+    display: none; /* Remove the line after the last item */
+  }
+
+  .navbar-links a {
+    font-size: 1.5rem; /* Larger font size */
+    font-family: BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    color: #ffffff; /* Text color */
+    transition: color 0.3s ease, background-color 0.3s ease;
+    padding: 0.5rem 0.5rem; /* Reduced padding for links */
+    border-radius: 5px;
+    text-decoration: none;
+  }
+
+  .navbar-links a:hover {
+    color: #193325; /* Darker text color on hover */
+    border-radius: 5px;
+  }
+}
+
+
+

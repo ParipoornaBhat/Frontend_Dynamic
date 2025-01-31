@@ -1,0 +1,55 @@
+.manageuser-error-message {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #f44336;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: auto;
+  max-width: 400px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+}
+
+.manageuser-error-message.expanded {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.manageuser-error-message.show {
+  opacity: 1;
+}
+
+.manageuser-error-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.manageuser-error-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.manageuser-error-expand {
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.manageuser-error-close {
+  background-color: transparent;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}

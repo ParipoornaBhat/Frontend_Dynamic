@@ -1,0 +1,92 @@
+/* Loading Screen Wrapper */
+.loading-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff; /* Initial white background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+  animation:loading2-fade-out 4s 2s forwards;
+}
+
+/* Green Slide Animation */
+.loading-green-slide {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: #1AB1AA; /* Dark green background */
+  animation: loading-slide-in 1s forwards, loading-slide-out 2s 2s forwards;
+}
+
+/* Logo Container */
+.loading-logo-container {
+  position: relative;
+  opacity: 0;
+  animation: loading-fade-in 1s 1s forwards, loading-fade-out 2s 2s forwards;
+}
+
+/* Logo */
+.loading-logo {
+  width: 300px;
+  height: auto;
+}
+
+/* Keyframes for sliding animation */
+@keyframes loading-slide-in {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 0;
+  }
+}
+
+@keyframes loading-slide-out {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Keyframes for logo fading */
+@keyframes loading-fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes loading-fade-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes loading2-fade-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
