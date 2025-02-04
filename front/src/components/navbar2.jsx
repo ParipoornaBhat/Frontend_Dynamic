@@ -164,9 +164,11 @@ const NavBar = () => {
             </a>
 
               </li>
-              <li>
-                <Link to="/notification">Notification</Link>
-              </li>
+              {
+              //<li>
+                //<Link to="/notification">Notification</Link>
+              //</li>}
+}
              
               
               {employeeRoles.some(r => r.roleName === role) && (
@@ -183,7 +185,7 @@ const NavBar = () => {
 
 
               <li>
-                <a href="#" onClick={handleLogout}>
+                <a href="#" onClick={handleLogout} style={{ color:window.innerWidth < 768 ? "rgb(0,0,01)" : "rgb(0,0,01)",fontWeight:window.innerWidth < 768 ? "" : ""}}>
                   Logout
                 </a>
               </li>

@@ -132,8 +132,8 @@ const RegisterModal = ({ onClose, activeTab }) => {
   }, [activeTab]);
 
   return (
-    <StyledOverlay onClick={onClose}>
-      <StyledModal onClick={(e) => e.stopPropagation()}>
+    <StyledOverlay onClick={onClose} >
+      <StyledModal onClick={(e) => e.stopPropagation()} style={{ maxWidth:window.innerWidth < 768 ? "280px" : "500px"}}>
         <section className="user-reg-container">
           <header>{activeTab} Registration</header>
           <form className="user-reg-form" onSubmit={handleSubmit}>
@@ -149,6 +149,7 @@ const RegisterModal = ({ onClose, activeTab }) => {
                   onChange={handleChange}
                   ref={(el) => (inputRefs.current[0] = el)}
                   onKeyDown={(e) => handleKeyDown(e, 0)}
+                  style={{ maxWidth:window.innerWidth < 768 ? "150px" : "300px"}}
                 />
                 {errors.firstName && <p className="user-reg-error">{errors.firstName}</p>}
                 <input
@@ -160,6 +161,7 @@ const RegisterModal = ({ onClose, activeTab }) => {
                   onChange={handleChange}
                   ref={(el) => (inputRefs.current[1] = el)}
                   onKeyDown={(e) => handleKeyDown(e, 1)}
+                  style={{ maxWidth:window.innerWidth < 768 ? "80px" : "200px"}}
                 />
                 {errors.lastName && <p className="user-reg-error">{errors.lastName}</p>}
               </div>
