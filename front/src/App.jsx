@@ -6,8 +6,8 @@ import Login from './pages/Login.jsx';
 import Footer from './components/footer1.jsx'; // Ensure correct casing
 import LoadingScreen from './components/LoadingScreen.jsx'; // Import the LoadingScreen component
 import Profile from './pages/general/Profile.jsx';
-import ChangePassword2 from './pages/general/chpass.jsx';
-import ForgotPassword from './pages/ForgotPassword.jsx';
+import ChangePassword from './pages/general/ChangePassword';
+import ForgotPassword from './pages/ForgotPassword';
 import ManageUsers from './pages/other/Manageuser.jsx';
 
 function App() {
