@@ -13,6 +13,9 @@ const Profile = ({ isVisible, onClose }) => {
   const [updateMessage, setUpdateMessage] = useState('');
   const [selectedImage, setSelectedImage] = useState(null); // State to handle image preview
   const [profileeditError, setProfileeditError] = useState(''); // State for error message
+  const [email, setEmail] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
   const token = localStorage.getItem('token');
   const _id = localStorage.getItem('_id');
   const fileInputRef = useRef(null); // For triggering file input
@@ -119,7 +122,42 @@ const Profile = ({ isVisible, onClose }) => {
     }
 };
 
+const handleForgotPassword = async (e) => {
+  e.preventDefault();
+  setUpdateMessage('');
 
+  // Create a FormData object to collect form data
+  const formData = new FormData(e.target); // e.target refers to the form element
+  
+  // Get the email from FormData
+  const email = formData.get('email');  // Make sure the email field has name="email"
+
+  if (!email) {
+    setUpdateMessage('Email is required.');
+    return;
+  }
+
+  setIsLoading(true); // Set loading state
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/api/forgotpassword`,
+      { email }
+    );
+
+    setUpdateMessage('Password reset link has been sent to your email.');
+  } catch (err) {
+    // Handle error
+    setUpdateMessage(`Error in sending email: ${err.message}`);
+    setTimeout(() => {
+      setUpdateMessage('');
+    }, 2000);
+  } finally {
+    setIsLoading(false); // Reset loading state
+    setTimeout(() => {
+      setUpdateMessage('');
+    }, 2000);
+  }
+};
   
 
   const handleKeyDown = (e, nextField) => {
@@ -252,7 +290,13 @@ const Profile = ({ isVisible, onClose }) => {
   <p><strong>Company Billing Name:</strong> {profileData?.companyBillingName}</p>
 )}
               <p><strong>Address:</strong> {`${profileData?.address?.street}, ${profileData?.address?.city}, ${profileData?.address?.state}, ${profileData?.address?.postalCode}, ${profileData?.address?.country}`}</p>
-              <button className="change-password-button">Change Password</button>
+
+
+       
+
+
+
+
             </div>
           </>
         ) : (
@@ -350,7 +394,54 @@ const Profile = ({ isVisible, onClose }) => {
               </button>
             </div>
           </>
+        )}     <form className="change" onSubmit={handleForgotPassword}>
+        {/* Display error message */}
+        {error && (
+          <div
+            style={{
+              color: 'red',
+              backgroundColor: '#ffe6e6',
+              padding: '10px',
+              borderRadius: '5px',
+              marginBottom: '15px',
+              textAlign: 'center',
+            }}
+          >
+            {error}
+          </div>
         )}
+
+        {/* Display success message */}
+        {successMessage && (
+          <div
+            style={{
+              color: 'green',
+              backgroundColor: '#e6ffe6',
+              padding: '10px',
+              borderRadius: '5px',
+              marginBottom: '15px',
+              textAlign: 'center',
+            }}
+          >
+            {successMessage}
+          </div>
+        )}
+
+        <div className="form-group">
+          <label htmlFor="email"></label>
+          <input
+            type="hidden"
+            id="login-password"
+            name="email"
+            className="login-input"
+            value={profileData?.email}
+            required
+            
+          />
+        </div>
+        <button type="submit" className="login-button" disabled={isLoading}>
+          {isLoading ? 'Sending...' : 'Send Password reset Link'}
+        </button> </form>
         <div className="notification-settings">
           <h3>Manage Message Service</h3>
           <div className="notification-toggle">
