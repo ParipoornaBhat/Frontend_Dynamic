@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import '../../css/changepassword.css';
 
-function ChangePassword() {
+function ChangePassword2() {
   const { token } = useParams(); // Extract the token from the URL
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -128,4 +128,4 @@ function ChangePassword() {
   );
 }
 
-export default ChangePassword;
+export default ChangePassword2;

@@ -6,7 +6,7 @@ import Login from './pages/Login.jsx';
 import Footer from './components/footer1.jsx'; // Ensure correct casing
 import LoadingScreen from './components/LoadingScreen.jsx'; // Import the LoadingScreen component
 import Profile from './pages/general/Profile.jsx';
-import ChangePassword from './pages/general/chpass.jsx';
+import ChangePassword2 from './pages/general/chpass.jsx';
 import ForgotPassword from './pages/ForgotPassword.jsx';
 import ManageUsers from './pages/other/Manageuser.jsx';
 
@@ -46,7 +46,7 @@ function App() {
         <Route path="/profile" element={<Login />} />
         <Route path="/manageusers" element={<ManageUsers />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/changpassword" element={<ChangePassword />} />
+        <Route path="/changpassword" element={<ChangePassword2 />} />
         <Route path="/ordermanagement" element={<Login />} />
         <Route path="/notification" element={<Login />} />
         <Route path="/itemmanagement" element={<Login />} />
