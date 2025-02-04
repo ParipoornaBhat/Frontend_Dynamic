@@ -46,7 +46,7 @@ function App() {
         <Route path="/profile" element={<Login />} />
         <Route path="/manageusers" element={<ManageUsers />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
-        <Route path="/changepassword/:token" element={<ChangePassword />} />
+        <Route path="/changpassword/:token" element={<ChangePassword />} />
         <Route path="/ordermanagement" element={<Login />} />
         <Route path="/notification" element={<Login />} />
         <Route path="/itemmanagement" element={<Login />} />
