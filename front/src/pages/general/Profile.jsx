@@ -90,8 +90,7 @@ const Profile = ({ isVisible, onClose }) => {
         }
 
         const response = await axios.post(
-            `${import.meta.env.VITE_BASE_URL}/general/selfPro
-            fileEdit`,
+            `${import.meta.env.VITE_BASE_URL}/general/selfProfileEdit`,
             formData,
             {
                 headers: {
