@@ -48,7 +48,7 @@ function App() {
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/changepassword/:token" element={<ChangePassword />} />
         <Route path="/ordermanagement" element={<Login />} />
-        <Route path="/notification" element={<Login />} />
+        <Route path="/a/notification" element={<Login />} />
         <Route path="/itemmanagement" element={<Login />} />
         <Route path="/taskmanage" element={<Login />} />
       </Routes>
