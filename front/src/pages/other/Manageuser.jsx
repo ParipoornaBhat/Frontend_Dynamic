@@ -134,31 +134,62 @@ useEffect(() => {
 
   
 
-  const handleRoleChange = async (userId, newRole) => {
-    if (userId === currentUserId) {
-      alert('You cannot change your own role!');
-      return;
-    }
+const handleRoleChange = async (userId, newRole) => {
+  // Prevent role change for the current logged-in user
+  if (userId === currentUserId) {
+    setErrorMessage('You cannot change your own role!');
+    return;
+  }
 
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/manage/updateRole`,
-        { userId, newRole },
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        }
-      );
+  try {
+    // Prepare the updates object for the role change
+    const updates = { role: newRole };
 
-      if (response.status === 200) {
-        setUsers((prevUsers) =>
-          prevUsers.map((user) => (user._id === userId ? { ...user, role: newRole } : user))
-        );
+    // Create a FormData object to send the updates along with the userId
+    const formData = new FormData();
+    formData.append('_id', userId);  // Pass the userId here
+    formData.append('updates', JSON.stringify(updates));
+
+    // Log the updates being sent for debugging purposes
+    console.log("Sending Role Update: ", updates);
+
+    // Make the API call to update the role
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/manage/anyProfileEdit`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data',
+        },
       }
-    } catch (error) {
-      setErrorMessage('Failed to update user role.'); // Show error message
-      console.error('Error updating role:', error);
+    );
+
+    // Check if the response status is OK
+    if (response.status === 200) {
+      // Update the users list after the role change
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, role: newRole } : user
+        )
+      );
+      setErrorMessage('User role updated successfully!');
+    } else {
+      setErrorMessage('Failed to update user role.');
     }
-  };
+
+    // Clear the error message after 2 seconds
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 2000);
+
+  } catch (error) {
+    setErrorMessage('Error updating user role. Please try again later.');
+    console.error('Error updating role:', error);
+  }
+};
+
+
 
   const getRoles = () => (activeTab === 'Employee' ? employeeRoles : userRoles);
 

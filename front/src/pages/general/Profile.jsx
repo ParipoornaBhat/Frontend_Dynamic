@@ -244,7 +244,7 @@ const handleForgotPassword = async (e) => {
     }
 
     setTimeout(() => {
-      setUpdateMessage('');
+      setUpdateMessage(`\n \n`);
     }, 2000);
   };
 
@@ -459,7 +459,7 @@ const handleForgotPassword = async (e) => {
               onChange={() => handleMsgServiceToggle('whatsapp')}
             />
           </div>
-          {updateMessage && <span className="update-message">{updateMessage}</span>}
+          {updateMessage && <span className="update-message">{updateMessage}</span>}<br/><br/><br/><br/>
         </div>
       </div>
     </div>

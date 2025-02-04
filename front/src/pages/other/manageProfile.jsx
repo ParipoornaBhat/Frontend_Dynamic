@@ -14,6 +14,7 @@ const ManageProfile = ({ ID ,isVisible, onClose }) => {
   const [selectedImage, setSelectedImage] = useState(null); // State to handle image preview
   const [manageUserProfileEditError, setManageUserProfileEditError] = useState('');
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
       const [successMessage, setSuccessMessage] = useState('');
       const [isLoading, setIsLoading] = useState(false);
   const token = localStorage.getItem('token');
@@ -273,39 +274,61 @@ const handleSaveChanges = async (userId) => {
       }, 2000);
     }
   };
-  const handleMsgServiceToggle = async (type) => {
-    if (!profileData) return;
+  
+const handleMsgServiceToggle = async (type,userId) => {
+  if (!profileData) return;
 
-    const updatedMsgService = { 
-      ...profileData.msgService, 
-      [type]: !profileData.msgService?.[type] 
-    };
+  // Ensure msgService is defined (use a default object if undefined)
+  const updatedMsgService = {
+    ...profileData.msgService,
+    [type]: !profileData.msgService?.[type],  // Toggle the service value
+  };
 
-    setProfileData((prev) => ({ ...prev, msgService: updatedMsgService }));
+  const _id = userId;
+  
+  // Log the updated msgService to ensure it's correct
+  console.log("Updated MsgService: ", updatedMsgService);
 
-    try {//pending
-      const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/manage/`,
-        {
-          _id,
-          updates: { msgService: updatedMsgService },
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+  setProfileData((prev) => ({ ...prev, msgService: updatedMsgService }));
+  setLoading(true); // Start loading
 
-      if (response.status === 200) {
-        setUpdateMessage('Message service settings updated successfully!');
-      } else {
-        setUpdateMessage('Failed to update message service settings.');
-      }
-    } catch (error) {
-      setUpdateMessage('Error updating message service settings.');
+  try {
+    // Log the payload being sent to the backend
+    console.log("Sending Payload: ", {
+      _id,
+      updates: { msgService: updatedMsgService }
+    });
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/manage/anyProfileEdit`,
+      {
+        _id,
+        updates: { msgService: updatedMsgService },
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    // Log the response from the API
+    console.log("API Response: ", response);
+
+    if (response.status === 200) {
+      setUpdateMessage('Message service settings updated successfully!');
+    } else {
+      setUpdateMessage('Failed to update message service settings.');
     }
-
+  } catch (error) {
+    console.error("Error updating message service settings:", error);
+    setUpdateMessage('Error updating message service settings.');
+  } finally {
+    setLoading(false); // Stop loading
     setTimeout(() => {
       setUpdateMessage('');
     }, 2000);
-  };
+  }
+};
+
+
+
 
   if (error) {
     return (
@@ -347,7 +370,6 @@ const handleSaveChanges = async (userId) => {
         <p><strong>Company Billing Name:</strong> {profileData?.companyBillingName}</p>
       )}
       <p><strong>Address:</strong> {`${profileData?.address?.street}, ${profileData?.address?.city}, ${profileData?.address?.state}, ${profileData?.address?.postalCode}, ${profileData?.address?.country}`}</p>
-      <button className="change-password-button">Change Password</button>
     </div>
   </>
 ) : (
@@ -543,26 +565,29 @@ const handleSaveChanges = async (userId) => {
   {isLoading ? 'Sending...' : 'Send Password reset Link'}
 </button> </form>
 
-         <div className="notification-settings">
-           <h3>Manage Message Service</h3>
-           <div className="notification-toggle">
-             <label>Email Service</label>
-             <input
-               type="checkbox"
-               checked={profileData?.msgService?.email || false}
-               onChange={() => handleMsgServiceToggle('email')}
-             />
-           </div>
-           <div className="notification-toggle">
-             <label>WhatsApp Service</label>
-             <input
-               type="checkbox"
-               checked={profileData?.msgService?.whatsapp || false}
-               onChange={() => handleMsgServiceToggle('whatsapp')}
-             />
-           </div>
-           {updateMessage && <span className="update-message">{updateMessage}</span>}
-         </div>
+
+<div className="notification-settings">
+  <h3>Manage Message Service</h3>
+  <div className="notification-toggle">
+    <label>Email Service</label>
+    <input
+      type="checkbox"
+      checked={profileData?.msgService?.email || false}
+      onChange={() => handleMsgServiceToggle('email',profileData?._id)}
+      disabled={loading} // Disable while loading
+    />
+  </div>
+  <div className="notification-toggle">
+    <label>WhatsApp Service</label>
+    <input
+      type="checkbox"
+      checked={profileData?.msgService?.whatsapp || false}
+      onChange={() => handleMsgServiceToggle('whatsapp',profileData?._id)}
+      disabled={loading} // Disable while loading
+    />
+  </div>
+  {updateMessage && <span className="update-message">{updateMessage}</span>}
+</div>
        </div>
      </div>
    );
