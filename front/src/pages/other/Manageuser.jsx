@@ -17,7 +17,7 @@ const ManageUsers = () => {
   const [loadingMessage, setLoadingMessage] = useState('');
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(null);  // Track which user's menu is open
   const [errorMessage, setErrorMessage] = useState(''); // Track error message
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -25,14 +25,38 @@ const ManageUsers = () => {
   const [isMProfileVisible, setIsProfileVisible] = useState(false);
   
   const handleMProfileToggle = () => {
-    setIsProfileVisible(!isMProfileVisible);
+    setIsProfileVisible(!isMProfileVisible);  // Toggle visibility for the profile
   };
+
   const toggleMProfile = () => {
-    setIsProfileOpen(!isMProfileOpen); // Toggle the profile visibility
+    setIsProfileOpen(!isMProfileOpen);  // Toggle profile open/close state
   };
 
+  const handleMenuToggle = (userId, e) => {
+    e.stopPropagation();  // Prevent event propagation so that clicking inside the menu won't trigger outside click
+    setMenuOpen(menuOpen === userId ? null : userId);  // Toggle menu visibility for the clicked user
+  };
 
+  const handleMProfileClick = (e) => {
+    e.stopPropagation();  // Prevent the profile button click from closing the menu
+    handleMProfileToggle();  // Toggle profile visibility for the selected user
+  };
 
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(null);  // Close the menu if clicked outside of it
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []); 
 
   useEffect(() => {
     if (isModalOpen) {
@@ -48,39 +72,35 @@ const ManageUsers = () => {
   
   
 
-  const menuRef = useRef(null);
-
 
 
   const token = localStorage.getItem('token');
   const currentUserId = localStorage.getItem('_id');
   const employeeRoles = JSON.parse(localStorage.getItem('employeeRoles')) || [];
   const userRoles = JSON.parse(localStorage.getItem('userRoles')) || [];
-  
+  const fetchUsers = async () => {
+    setIsLoading(true);
+    setLoadingMessage('Loading users...');
+    const url =
+      activeTab === 'Employee'
+        ? `${import.meta.env.VITE_BASE_URL}/manage/GetAllEmployees`
+        : `${import.meta.env.VITE_BASE_URL}/manage/GetAllUsers`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUsers(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      setUsers([])
+      setErrorMessage('Failed to load users.'); // Set error message
+      console.error('Error fetching users:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      setIsLoading(true);
-      setLoadingMessage('Loading users...');
-      const url =
-        activeTab === 'Employee'
-          ? `${import.meta.env.VITE_BASE_URL}/manage/GetAllEmployees`
-          : `${import.meta.env.VITE_BASE_URL}/manage/GetAllUsers`;
-
-      try {
-        const response = await axios.get(url, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUsers(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-        setUsers([])
-        setErrorMessage('Failed to load users.'); // Set error message
-        console.error('Error fetching users:', error);
-      }
-    };
-
     fetchUsers();
   }, [activeTab]);
 
@@ -109,16 +129,67 @@ const ManageUsers = () => {
   }, [searchQuery, sortOption, users]);
 
 // Keep the menuRef logic as is to manage the outside click listener for closing the menu
-const handleMenuToggle = (userId, e) => {
-  e.stopPropagation(); // Prevent click from propagating to outside listener
-  setMenuOpen(menuOpen === userId ? null : userId); // Toggle menu for the clicked user
-};
 
 
-const handleMProfileClick = (e) => {
-  e.stopPropagation(); // Prevent click on profile button from closing the menu
-  handleMProfileToggle(); // Toggle the profile visibility
+
+
+
+
+const handleDelete = async (user) => {
+  // Prevent role change for the current logged-in user
+  if (user._id === currentUserId) {
+    setErrorMessage('You cannot Delete Your Own Profile!');
+    return;
+  }
+
+  try {
+    // Prepare the updates object for the role change
+    const updates = { deleted: !(user.deleted) || false };
+
+    // Create a FormData object to send the updates along with the userId
+    const formData = new FormData();
+    formData.append('_id', user._id);  // Pass the userId here
+    formData.append('updates', JSON.stringify(updates));
+
+    // Log the updates being sent for debugging purposes
+    console.log("Sending Role Update: ", updates);
+
+    // Make the API call to update the role
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/manage/anyProfileEdit`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+
+    // Check if the response status is OK
+    if (response.status === 200) {
+      // Update the users list after the role change
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, role: newRole } : user
+        )
+      );
+      setErrorMessage('User role updated successfully!');
+    } else {
+      setErrorMessage('Failed to update user role.');
+    }
+    fetchUsers();
+    // Clear the error message after 2 seconds
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 2000);
+
+  } catch (error) {
+    setErrorMessage('Error updating user role. Please try again later.');
+    console.error('Error updating role:', error);
+  }
 };
+
 
 useEffect(() => {
   const handleOutsideClick = (event) => {
@@ -308,7 +379,7 @@ const handleRoleChange = async (userId, newRole) => {
               </select>
             </div>
 
-            <div className="manageuser-menu-wrapper" ref={menuRef}>
+            <div key={user._id} className="manageuser-menu-wrapper">
               <button
                 className="manageusers-card-menu"
                 onClick={(e) => handleMenuToggle(user._id, e)}
@@ -321,13 +392,13 @@ const handleRoleChange = async (userId, newRole) => {
                   
                   
 
-                  <div className="manageuser-dropdown-menu">
+                  <div className="manageuser-dropdown-menu" ref={menuRef} >
                   <button onClick={handleMProfileClick}>
                     👤 Profile
                   </button>
                 
 
-                    <button onClick={() => console.log('Delete', user)}>❌ Delete</button>
+                    <button onClick={() => handleDelete(user)}>❌ Delete</button>
                     <button onClick={() => console.log('Order Items', user)}>📦 Order Items</button>
                     <button onClick={() => console.log('Order History', user)}>📜 Order History</button>
                     <button onClick={() => console.log('Notify', user)}>🔔 Notify</button>
