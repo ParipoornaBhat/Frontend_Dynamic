@@ -180,6 +180,11 @@ const NavBar = () => {
                     Profile
                   </a>
                 </li>
+                <li>
+                <Link to="/itemlist">Items-List</Link>
+
+                 
+                </li>
                 {employeeRoles.some(r => r.roleName === role) && (
                   <>
                     {(actions.some(action => action.canView && (action.name === "GetAllEmployees" || action.name === "GetAllUsers"))) && (

@@ -9,8 +9,8 @@ import Profile from './pages/general/Profile.jsx';
 import ChangePassword from './pages/general/chpass.jsx';
 import NotFound from './pages/general/NotFound.jsx';
 import ForgotPassword from './pages/ForgotPassword';
-import ManageUsers from './pages/other/Manageuser.jsx';
-
+import ManageUsers from './pages/manageuser/Manageuser.jsx';
+import ItemListing from './pages/OrderItem/ItemListing.jsx';
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,10 +44,12 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/profile" element={<Login />} />
+        <Route path="/itemlist" element={<ItemListing />} />
         <Route path="/manageusers" element={<ManageUsers />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/changepassword/:token" element={<ChangePassword />} />
+
+
         <Route path="/ordermanagement" element={<Login />} />
         <Route path="/a/notification" element={<Login />} />
         <Route path="/itemmanagement" element={<Login />} />

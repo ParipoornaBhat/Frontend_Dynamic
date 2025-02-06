@@ -9,6 +9,7 @@ import RegisterModal from './RegisterModal';
 import Highlight from 'react-highlight-words';
 import styled from 'styled-components';
 
+
 const ManageUsers = () => {
   const [activeTab, setActiveTab] = useState('Employee');
   const [searchQuery, setSearchQuery] = useState('');
