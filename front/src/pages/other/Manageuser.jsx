@@ -391,8 +391,8 @@ const handleRoleChange = async (userId, newRole) => {
                 <>    
                   
                   
-
-                  <div className="manageuser-dropdown-menu" ref={menuRef} >
+                  <div ref={menuRef}>
+                  <div className="manageuser-dropdown-menu"  >
                   <button onClick={handleMProfileClick}>
                     👤 Profile
                   </button>
@@ -410,8 +410,9 @@ const handleRoleChange = async (userId, newRole) => {
                       ID={`${user._id}`}
                       isVisible={isMProfileVisible}
                       onClose={() => setIsProfileVisible(false)}
+                      
                       // Pass selected user ID
-                    />
+                    /></div>
                 </>
               )}
 
