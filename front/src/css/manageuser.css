@@ -47,15 +47,25 @@
 }
 
 .manageuser-active-tab {
-  background-color: #00060d;
+  background-color: #00060dd2;
   color: white;
 }
-
+.manageuser-active-tab:hover {
+  transition: background-color 0.5s;
+  background-color: #00060d;
+}
 .manageuser-inactive-tab {
   background-color: #ddd;
   color: black;
   cursor: pointer;
 }
+
+.manageuser-inactive-tab:hover {
+  transition: background-color 0.5s;
+  background-color: #bebebe;
+}
+
+
 
 .manageusers-header {
   display: flex;
