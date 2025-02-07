@@ -586,7 +586,7 @@ const handleMsgServiceToggle = async (type,userId) => {
     />
   </div>
   {updateMessage && <span className="update-message">{updateMessage}</span>}
-</div>
+</div><br/><br/><br/>
        </div>
      </div>
    );

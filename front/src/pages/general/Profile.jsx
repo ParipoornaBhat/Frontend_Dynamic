@@ -459,8 +459,8 @@ const handleForgotPassword = async (e) => {
               onChange={() => handleMsgServiceToggle('whatsapp')}
             />
           </div>
-          {updateMessage && <span className="update-message">{updateMessage}</span>}<br/><br/><br/><br/>
-        </div>
+          {updateMessage && <span className="update-message">{updateMessage}</span>}
+        </div><br/><br/><br/>
       </div>
     </div>
   );
