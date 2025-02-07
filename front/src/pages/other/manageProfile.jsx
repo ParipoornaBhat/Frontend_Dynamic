@@ -229,7 +229,6 @@ const handleSaveChanges = async (userId) => {
             return;
         }
 
-        setProfileeditError('');
         setSelectedImage(URL.createObjectURL(file));
 
         setProfileData((prev) => ({
