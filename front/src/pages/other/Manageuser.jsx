@@ -78,6 +78,7 @@ const ManageUsers = () => {
   const currentUserId = localStorage.getItem('_id');
   const employeeRoles = JSON.parse(localStorage.getItem('employeeRoles')) || [];
   const userRoles = JSON.parse(localStorage.getItem('userRoles')) || [];
+  
   const fetchUsers = async () => {
     setIsLoading(true);
     setLoadingMessage('Loading users...');
@@ -350,7 +351,8 @@ const handleRoleChange = async (userId, newRole) => {
 />
             </div>
 
-            <div className="manageusers-card-content">
+            <div className="manageusers-card-content">              
+              <div className="manageuser-user-phone"><strong>ID:</strong>{user.ID}</div>
               <h3>{/*`${user.fullName.firstName} ${user.fullName.lastName}`*/}
               <Highlight
                     searchWords={[searchQuery]}
@@ -396,8 +398,6 @@ const handleRoleChange = async (userId, newRole) => {
                   <button onClick={handleMProfileClick}>
                     👤 Profile
                   </button>
-                
-
                     <button onClick={() => handleDelete(user)}>❌ Delete</button>
                     <button onClick={() => console.log('Order Items', user)}>📦 Order Items</button>
                     <button onClick={() => console.log('Order History', user)}>📜 Order History</button>

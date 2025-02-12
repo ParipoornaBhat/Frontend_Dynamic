@@ -362,6 +362,7 @@ const handleMsgServiceToggle = async (type,userId) => {
     </div>
     <div className="profile-details">
       <h2>{profileData?.fullName?.firstName} {profileData?.fullName?.lastName}</h2>
+      <p><strong>ID:</strong> {profileData?.ID}</p>
       <p><strong>Phone:</strong> {profileData?.phone}</p>
       <p><strong>Email:</strong> {profileData?.email}</p>
       <p><strong>Role:</strong> {profileData?.role}</p>
@@ -409,6 +410,9 @@ const handleMsgServiceToggle = async (type,userId) => {
         placeholder="Last Name"
       />
     </div>
+    <div className="profile-details-row">    <div className="profile-detail-label"><strong>ID:</strong>{profileData?.ID}</div>
+
+</div>
     <div className="profile-details-row">
       <div className="profile-detail-label">Phone:</div>
       <input

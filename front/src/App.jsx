@@ -10,6 +10,8 @@ import ChangePassword from './pages/general/chpass.jsx';
 import NotFound from './pages/general/NotFound.jsx';
 import ForgotPassword from './pages/ForgotPassword';
 import ManageUsers from './pages/other/Manageuser.jsx';
+import ItemManage from './pages/Items/AddItems.jsx';
+
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +43,7 @@ function App() {
   return (
     <><div className="page-container">
       <NavBar />
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
@@ -50,7 +53,7 @@ function App() {
         <Route path="/changepassword/:token" element={<ChangePassword />} />
         <Route path="/ordermanagement" element={<Login />} />
         <Route path="/a/notification" element={<Login />} />
-        <Route path="/itemmanagement" element={<Login />} />
+        <Route path="/itemmanagement" element={<ItemManage />} />
         <Route path="/taskmanage" element={<Login />} />
 
 

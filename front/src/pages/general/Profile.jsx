@@ -282,6 +282,7 @@ const handleForgotPassword = async (e) => {
             </div>
             <div className="profile-details">
               <h2>{profileData?.fullName?.firstName} {profileData?.fullName?.lastName}</h2>
+              <p><strong>ID:</strong> {profileData?.ID}</p>
               <p><strong>Phone:</strong> {profileData?.phone}</p>
               <p><strong>Email:</strong> {profileData?.email}</p>
               <p><strong>Role:</strong> {profileData?.role}</p>
@@ -321,6 +322,7 @@ const handleForgotPassword = async (e) => {
             />
             <div className="edit-form">
               <h2>{profileData?.fullName?.firstName} {profileData?.fullName?.lastName}</h2>
+              <p><strong>ID:</strong> {profileData?.ID}</p>
               <p><strong>Phone:</strong> {profileData?.phone}</p>
               <p><strong>Email:</strong> {profileData?.email}</p>
               <p><strong>Role:</strong> {profileData?.role}</p>

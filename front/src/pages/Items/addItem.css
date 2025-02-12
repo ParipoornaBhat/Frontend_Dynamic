@@ -1,0 +1,157 @@
+
+.ItemForm-checks {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 15px;  /* Adjust the space between each checkbox */
+  margin-bottom: 10px; /* Adjust space between rows */
+}
+
+.ItemForm-check-label {
+  margin-left: 5px;  /* Adjust space between checkbox and label */
+}
+
+
+.ItemForm-container {
+  border:1px solid black;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.664);
+  max-width: 1000px; /* Restrict the width */
+  margin: 0 auto; /* Center the form */
+}
+
+.ItemForm-Process h1 {
+  margin-bottom: 20px;
+}
+
+/* Checkbox styling */
+.ItemForm-checks {
+  margin-bottom: 10px;
+}
+
+.ItemForm-check-input {
+  margin-right: 10px;
+}
+
+/* Form styles */
+.ItemFrom-reg-form {
+  margin-top: 5px;
+}
+
+.ItemForm-Job {
+  display: flex;
+  flex-wrap: wrap;  /* Allow wrapping */
+  gap: 0px;  /* Space between items */
+  margin-bottom: 5px;
+}
+
+.ItemForm-form-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+.ItemForm-form-input,
+.ItemForm-form-select {
+  width: 150px; /* Set width to 150px */
+  padding: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ItemForm-Job-remarkcheck {
+  margin-top: 10px;
+}
+
+.ItemForm-Job-remark-inputcheck {
+  margin-right: 8px;
+}
+
+/* Make sure <hr> is visible */
+hr {
+  border: 2px solid #000; /* Make the border black and thicker */
+  margin: 20px 0;
+  width: 100%;
+  margin-left: 0;
+}
+
+/* For tablets and larger screens (PC view) */
+@media (min-width: 768px) {
+  .ItemForm-checks {
+    display: inline-block;
+    margin-right: 15px;
+  }
+
+  .ItemForm-check-label {
+    font-size: 14px;
+  }
+
+  .ItemFrom-reg-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .ItemForm-Job {
+    width: 100%;
+    gap: 20px;
+  }
+
+  /* Make the form items responsive and allow multiple items per row */
+  .ItemForm-Job > div {
+    margin:0;
+    padding: 0;
+  }
+
+  .ItemForm-form-input,
+  .ItemForm-form-select {
+    font-size: 14px;
+  }
+
+  .ItemForm-Job-remarkcheck {
+    display: inline-block;
+    margin-top: 8px;
+  }
+
+  hr {
+    margin: 30px 0;
+  }
+}
+
+/* For mobile (less than 768px wide) */
+@media (max-width: 767px) {
+  .ItemForm-checks {
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .ItemForm-Job {
+    width: 100%;  /* Stack form fields */
+  }
+
+  .ItemForm-Job > div {
+    width: 100%;  /* Full width for each input */
+  }
+
+  .ItemForm-Job-input,
+  .ItemForm-Job-select {
+    margin-bottom: 18px;
+  }
+
+  .ItemForm-Job-remarkcheck {
+    display: block;
+    margin-top: 8px;
+  }
+
+  .ItemForm-form-label {
+    font-size: 16px;
+  }
+
+  /* Adjust input fields' padding and margin for smaller screens */
+  .ItemForm-form-input,
+  .ItemForm-form-select {
+    padding: 10px;
+    font-size: 16px;
+  }
+}

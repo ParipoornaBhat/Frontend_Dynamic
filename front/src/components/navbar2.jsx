@@ -187,6 +187,11 @@ const NavBar = () => {
                         <Link to="/manageusers">Manage Users</Link>
                       </li>
                     )}
+                    {(actions.some(action => action.canView && (action.name === "ItemManagementBOPP" || action.name === "ItemManagementPET"))) && (
+                      <li key="manage-items">
+                        <Link to="/itemmanagement">Manage Items</Link>
+                      </li>
+                    )}
                   </>
                 )}
                 <li>
