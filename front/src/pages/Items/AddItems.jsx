@@ -3,6 +3,8 @@ import './addItem.css';
 import Highlight from 'react-highlight-words';
 import styled from 'styled-components';
 import ManageUserError from '../other/ErrorMessage'; // Import the ErrorMessage component
+import ManageUserSuccess from '../other/SuccessMessage'; // Import the ErrorMessage component
+import SettingModal from './SettingModal';
 import axios from 'axios';
 import './addItem.css'
 
@@ -14,8 +16,15 @@ const AddItems = () => {
     const [loadingMessage, setLoadingMessage] = useState('');
     const [users, setUsers] = useState([]);
     const [errorMessage, setErrorMessage] = useState(''); // Track error message
-    
-    
+    const [successMessage, setSuccessMessage] = useState(''); // Track error message
+    const [BOPPoptions, setBOPPoptions] = useState([]); // For storing BOPP options
+    const [showModal, setShowModal] = useState(false); // To toggle modal visibility
+    const [editFormData, setEditFormData] = useState({}); // Data to edit in the modal
+    const [isOptionsFetched, setIsOptionsFetched] = useState(false); // Track if options are fetched
+
+  // Fetch form options from an API or data source
+ 
+
     const token = localStorage.getItem('token');
     const currentUserId = localStorage.getItem('_id');
     const employeeRoles = JSON.parse(localStorage.getItem('employeeRoles')) || [];
@@ -116,6 +125,55 @@ const AddItems = () => {
         cuttingAndSlitting: { jobInfo: { checked: false } },
       });
 
+
+const fetchformoptions = async () => {
+  try {
+    const token = localStorage.getItem('token'); // Get the token from localStorage
+    if (!token) {
+      setErrorMessage('No authentication token found');
+      return;
+    }
+
+    // Check if options are already fetched
+    if (isOptionsFetched) {
+      return; // If options are already fetched, don't fetch again
+    }
+
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/general/options`, {
+      headers: {
+        Authorization: `Bearer ${token}` // Attach token as Bearer token in Authorization header
+      }
+    });
+
+    // If the response is successful
+    setBOPPoptions(response.data.BOPPoptions); // Set options with the response data
+    setIsOptionsFetched(true); // Mark options as fetched
+    setEditFormData(response.data.BOPPoptions); 
+
+    setSuccessMessage('Options loaded successfully.'); // Set success message
+  } catch (error) {
+    // Handle error: if there's an issue with the request
+    setErrorMessage(error.response?.data?.message || 'Failed to load options.');
+  }
+};
+
+    
+      // Effect hook to call fetchformoptions when the component mounts
+     
+
+
+      const handleEditClick = () => {
+        setShowModal(true); // Show the modal
+      };
+    
+      // Close the modal
+      const handleCloseModal = () => {
+        setShowModal(false);
+      };
+    
+   
+
+
       const handleInputChange = (process, field, value, subField) => {
         if (subField) {
           // If the field has subfields (like jobInfo), we update the specific subfield
@@ -141,20 +199,31 @@ const AddItems = () => {
         }
       };
       
-    
+      useEffect(() => {
+        if (!isOptionsFetched) {
+          fetchformoptions(); // Fetch the data only when isOptionsFetched is false
+        }
+      }, [isOptionsFetched]);
 
   return (<>
+  
        
         <div className="manageusers-container">
       {/* Other components and JSX */}
       
+      
       {/* Display error message if there's an error */}
-      {errorMessage && (
-        <ManageUserError errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
-      )}
+  {errorMessage && (
+    <ManageUserError errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
+  )}
+  {successMessage && (
+    <ManageUserSuccess successMessage={successMessage} onClose={() => setSuccessMessage("")} />
+  )}
+      
 
       {/* Rest of your JSX */}
       <div className="manageusers-tabs">
+
         <button
           onClick={() => setActiveTab('BOPP')}
           className={activeTab === 'BOPP' ? 'manageuser-active-tab' : 'manageuser-inactive-tab'}
@@ -167,7 +236,26 @@ const AddItems = () => {
         >
           PET
         </button>
+        <button           
+      className='manageuser-active-tab' 
+      onClick={handleEditClick}>Edit Options</button>
         </div>
+         {/* Settings Button */}
+      
+
+          {/* Modal */}
+          {showModal && (
+          <SettingModal
+            editFormData={editFormData}
+            onClose={handleCloseModal} // Close modal
+            onSave={() => {
+              setIsOptionsFetched(false);
+              console.log("onSave is called");  // Log to check if it's triggered
+             // Set success message
+            }} 
+          />
+        )}
+
 
         {isLoading && <div className="manageusers-loading">Loading users...</div>}
         
@@ -181,7 +269,8 @@ const AddItems = () => {
             
 
 
-</div>
+</div>  <form className="ItemFrom-reg-form" >
+
       <div className='ItemForm-Process'>
   <h1>Process Involved</h1>
 
@@ -190,7 +279,7 @@ const AddItems = () => {
         className="ItemForm-check-input" 
         type="checkbox" 
         name="printingcheck" 
-        checked={BOPP.printing.jobInfo.checked} onChange={(e) => handleInputChange('printing', 'jobInfo', e.target.value, 'checked')}  
+        checked={BOPP.printing.jobInfo.checked} onChange={(e) => handleInputChange('printing', 'jobInfo', e.target.checked, 'checked')}  
     />
     <label className="ItemForm-check-label">Printing</label>
   </div>
@@ -262,7 +351,6 @@ const AddItems = () => {
 </div>
 <hr/>
 
-  <form className="ItemFrom-reg-form" >
   
   {
   BOPP.printing.jobInfo.checked && ( 
@@ -299,18 +387,21 @@ const AddItems = () => {
     <label className="ItemForm-form-label">Material Type : </label>
               
               <select
-                value={BOPP.printing.materialType}
+                
                 onChange={(e) => handleInputChange('printing', 'materialType', e.target.value )}
                 className="ItemForm-form-select"
               >
-                <option value="Plain">Plain</option>
-                <option value="Matte">Matte</option>
+                {BOPPoptions && BOPPoptions.find(option => option.name === "Printing Material Type") && 
+    BOPPoptions.find(option => option.name === "Printing Material Type").options.map((option, index) => (
+      <option key={index} value={option}>
+        {option}
+      </option>))}
               </select>
     </div>
     <div className='ItemForm-Job-select'>
     <label className="ItemForm-form-label">Cylinder : </label>
             <select
-                value={BOPP.printing.cylinder}
+                
                 onChange={(e) => handleInputChange('printing', 'cylinder', e.target.value )}
                 className="ItemForm-form-select"
               >
@@ -322,7 +413,7 @@ const AddItems = () => {
     <label className="ItemForm-form-label">Cylinder Direction</label>
               
                <select
-                value={BOPP.printing.cylinderDirection}
+                
                 onChange={(e) => handleInputChange('printing', 'cylinderDirection', e.target.value )}
                 className="ItemForm-form-select"
               >
@@ -454,14 +545,16 @@ const AddItems = () => {
       </div>
       
       <div className='ItemForm-Job-select'>
-      <label className="ItemForm-form-label">Cylinder : </label>
+      <label className="ItemForm-form-label">Type : </label>
               <select
-                  value={BOPP.lamination.cylinder}
                   onChange={(e) => handleInputChange('lamination', 'type', e.target.value )}
                   className="ItemForm-form-select"
                 >
-                  <option value="Regular">Regular</option>
-                  <option value="Mettalise">Mettalise</option>
+                  {BOPPoptions && BOPPoptions.find(option => option.name === "Lamination Type") && 
+                  BOPPoptions.find(option => option.name === "Lamination Type").options.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>))}
                 </select>
       </div>
       
@@ -618,8 +711,11 @@ const AddItems = () => {
                   onChange={(e) => handleInputChange('fabricLamination', 'materialType', e.target.value )}
                   className="ItemForm-form-select"
                 >
-                  <option value="a" >a</option>
-                  <option value="b">b</option>
+                  {BOPPoptions && BOPPoptions.find(option => option.name === "Fabric Lamination Material Types") && 
+                  BOPPoptions.find(option => option.name === "Fabric Lamination Material Types").options.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>))}
                 </select>
       </div>
       <div className='ItemForm-Job-select'>
@@ -629,8 +725,11 @@ const AddItems = () => {
                   onChange={(e) => handleInputChange('fabricLamination', 'sides', e.target.value )}
                   className="ItemForm-form-select"
                 >
-                  <option value="A" >A</option>
-                  <option value="B">B</option>
+                  {BOPPoptions && BOPPoptions.find(option => option.name === "Fabric Lamination Sides") && 
+                  BOPPoptions.find(option => option.name === "Fabric Lamination Sides").options.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>))}
                 </select>
       </div>
       <div className='ItemForm-Job-select'>
@@ -743,8 +842,11 @@ const AddItems = () => {
                   onChange={(e) => handleInputChange('cuttingAndSlitting', 'handleType', e.target.value )}
                   className="ItemForm-form-select"
                 >
-                  <option value="a" >a</option>
-                  <option value="b">b</option>
+                  {BOPPoptions && BOPPoptions.find(option => option.name === "Cutting and Slitting Handle Types") && 
+                  BOPPoptions.find(option => option.name === "Cutting and Slitting Handle Types").options.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>))}
                 </select>
       </div>
       

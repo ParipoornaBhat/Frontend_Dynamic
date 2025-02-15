@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import defaultpic from '../../assets/default.png';
+import ManageUserError from '../general/ErrorMessage'; // Import the ErrorMessage component
+import ManageUserSuccess from '../general/SuccessMessage'; // Import the SuccessMessage component
 
 const ManageProfile = ({ ID ,isVisible, onClose }) => {
   const [profileData, setProfileData] = useState(null);
@@ -15,8 +17,9 @@ const ManageProfile = ({ ID ,isVisible, onClose }) => {
   const [manageUserProfileEditError, setManageUserProfileEditError] = useState('');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-      const [successMessage, setSuccessMessage] = useState('');
-      const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const token = localStorage.getItem('token');
   const _id = ID;
   const fileInputRef = useRef(null);
@@ -39,26 +42,26 @@ const fetchProfile = async () => {
       setProfileData(response.data);
     } else {
       console.log(response);
-      setError('Failed to fetch profile details. Please try again later.');
+      setErrorMessage('Failed to fetch profile details. Please try again later.');
     }
   } catch (error) {
     if (error.response) {
       // Handle various error responses
       if (error.response.status === 404) {
-        setError('Profile not found. Please check the user ID.');
+        setErrorMessage('Profile not found. Please check the user ID.');
       } else if (error.response.status === 401) {
-        setError('Unauthorized access. Please login again.');
+        setErrorMessage('Unauthorized access. Please login again.');
       } else if (error.response.status === 500) {
-        setError('Server error. Please try again later.');
+        setErrorMessage('Server error. Please try again later.');
       } else {
-        setError(`Error: ${error.response.status}. ${error.response.data?.message || 'An unexpected error occurred.'}`);
+        setErrorMessage(`Error: ${error.response.status}. ${error.response.data?.message || 'An unexpected error occurred.'}`);
       }
     } else if (error.request) {
       // Request was made but no response received
-      setError('No response from the server. Please check your network connection.');
+      setErrorMessage('No response from the server. Please check your network connection.');
     } else {
       // Error in setting up request
-      setError(`Error: ${error.message}`);
+      setErrorMessage(`Error: ${error.message}`);
     }
   }
 };
@@ -83,106 +86,106 @@ const handleEditToggle = () => {
     return newIsEditing;
   });
 };
+// Handle input changes
+const handleChange = (e, field, index) => {
+  setProfileData((prev) => {
+    const updatedField = [...(prev[field] || [])];
+    const value = e.target.value.trim(); // Trim spaces
+
+    // Prevent setting empty values (optional)
+    if (value === "") {
+      updatedField[index] = ""; // Keep it controlled, but don't save it in updates
+    } else {
+      updatedField[index] = value;
+    }
+
+    return { ...prev, [field]: updatedField };
+  });
+};
+const handleDeleteItem = (field, index) => {
+  setProfileData((prev) => {
+    const updatedField = [...(prev[field] || [])];
+    updatedField.splice(index, 1); // Remove item
+    return { ...prev, [field]: updatedField };
+  });
+};
+// Handle adding an item
+const handleAddItem = (field) => {
+  setProfileData((prev) => {
+    const updatedField = [...(prev[field] || []), ""]; // Add empty string to keep input controlled
+    return { ...prev, [field]: updatedField };
+  });
+};
 
 
-
-const handleSaveChanges = async (userId) => {
+const handleSaveChanges = async () => {
   if (!profileData) return;
 
   try {
-      const { fullName, role, email, phone, companyBillingName, address, msgService, profilePic } = profileData;
-      const updates = {};
+    const { addresses = [], brands = [], companyBillingName = [], msgService, profilePic, role } = profileData;
+    const updates = {};
 
-      // Include fullName if present
-      if (fullName) {
-          updates.fullName = {
-              firstName: fullName.firstName,
-              lastName: fullName.lastName
-          };
+    // Fetch userRoles from localStorage
+    const userRoles = JSON.parse(localStorage.getItem("userRoles")) || [];
+
+    // Check if the user's role is in userRoles
+    const canEditBrandsAndCompany = userRoles.some(userRole => userRole.roleName === role);
+
+    // Remove empty strings before updating
+    const filteredAddresses = addresses.filter(addr => addr.trim() !== "");
+    if (filteredAddresses.length > 0) updates.addresses = filteredAddresses;
+
+    if (canEditBrandsAndCompany) {
+      const filteredBrands = brands.filter(brand => brand.trim() !== "");
+      const filteredCompanyBillingNames = companyBillingName.filter(name => name.trim() !== "");
+
+      if (filteredBrands.length > 0) updates.brands = filteredBrands;
+      if (filteredCompanyBillingNames.length > 0) updates.companyBillingName = filteredCompanyBillingNames;
+    }
+
+    if (msgService) updates.msgService = msgService;
+
+    const formData = new FormData();
+    formData.append('_id', profileData._id);
+    formData.append('updates', JSON.stringify(updates)); // Convert updates to JSON
+
+    // Append profilePic only if it's a new file
+    if (profilePic instanceof File) {
+      formData.append('profilePic', profilePic);
+    }
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/general/selfProfileEdit`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
       }
+    );
 
-      // Include role if present
-      if (role) {
-          updates.role = role;
-      }
+    if (response.status === 200) {
+      setProfileData((prev) => ({
+        ...prev,
+        ...updates, // Apply updated fields
+        profilePic: profilePic instanceof File ? URL.createObjectURL(profilePic) : prev.profilePic,
+      }));
+      setIsEditing(false);
+      setSuccessMessage('Profile updated successfully!');
+    } else {
+      setErrorMessage('Failed to update profile.');
+    }
 
-      // Include email if present
-      if (email) {
-          updates.email = email;
-      }
-
-      // Include phone if present
-      if (phone) {
-          updates.phone = phone;
-      }
-
-      // Include companyBillingName if present
-      if (companyBillingName) {
-          updates.companyBillingName = companyBillingName;
-      }
-
-      // Include address if present
-      if (address) {
-          updates.address = {
-              street: address.street,
-              city: address.city,
-              state: address.state,
-              postalCode: address.postalCode,
-              country: address.country,
-          };
-      }
-
-      // Include msgService if present
-      if (msgService) {
-          updates.msgService = msgService;
-      }
-
-      const formData = new FormData();
-      formData.append('_id', userId);  // Pass the userId here
-      formData.append('updates', JSON.stringify(updates));
-
-      // If profilePic is a file, append it to the formData
-      if (profilePic instanceof File) {
-          formData.append('profilePic', profilePic);
-      }
-      console.log(userId)
-      const response = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/manage/anyProfileEdit`,
-          formData,
-          {
-              headers: {
-                  Authorization: `Bearer ${token}`,
-                  'Content-Type': 'multipart/form-data',
-              },
-          }
-      );
-
-      if (response.status === 200) {
-        setProfileData((prev) => ({
-              ...prev,
-              fullName: updates.fullName || prev.fullName,
-              role: updates.role || prev.role,
-              email: updates.email || prev.email,
-              phone: updates.phone || prev.phone,
-              companyBillingName: updates.companyBillingName || prev.companyBillingName,
-              address: updates.address || prev.address,
-              msgService: updates.msgService || prev.msgService,
-              profilePic: profilePic instanceof File ? URL.createObjectURL(profilePic) : prev.profilePic,
-          }));
-          handleEditToggle();
-          setUpdateMessage('Profile updated successfully!');
-      } else {
-          setUpdateMessage('Failed to update profile.');
-      }
-
-      // Clear the update message after 2 seconds
-      setTimeout(() => {
-          setUpdateMessage('');
-      }, 2000);
+    setTimeout(() => {
+      setSuccessMessage('');
+      setErrorMessage('');
+    }, 2000);
   } catch (error) {
-      setUpdateMessage('Error saving profile. Please try again later.');
+    setErrorMessage('Error saving profile. Please try again later.');
   }
 };
+
 
 
 
@@ -248,7 +251,7 @@ const handleSaveChanges = async (userId) => {
     const email = formData.get('email');  // Make sure the email field has name="email"
   
     if (!email) {
-      setUpdateMessage('Email is required.');
+      setErrorMessage('Email is required.');
       return;
     }
   
@@ -259,17 +262,17 @@ const handleSaveChanges = async (userId) => {
         { email }
       );
   
-      setUpdateMessage('Password reset link has been sent to your email.');
+      setSuccessMessage('Password reset link has been sent to your email.');
     } catch (err) {
       // Handle error
-      setUpdateMessage(`Error in sending email: ${err.message}`);
+      setErrorMessage(`Error in sending email: ${err.message}`);
       setTimeout(() => {
         setUpdateMessage('');
       }, 2000);
     } finally {
       setIsLoading(false); // Reset loading state
       setTimeout(() => {
-        setUpdateMessage('');
+        setErrorMessage('');
       }, 2000);
     }
   };
@@ -311,13 +314,13 @@ const handleMsgServiceToggle = async (type,userId) => {
     console.log("API Response: ", response);
 
     if (response.status === 200) {
-      setUpdateMessage('Message service settings updated successfully!');
+      setSuccessMessage('Message service settings updated successfully!');
     } else {
-      setUpdateMessage('Failed to update message service settings.');
+      setErrorMessage('Failed to update message service settings.');
     }
   } catch (error) {
     console.error("Error updating message service settings:", error);
-    setUpdateMessage('Error updating message service settings.');
+    setErrorMessage('Error updating message service settings.');
   } finally {
     setLoading(false); // Stop loading
     setTimeout(() => {
@@ -366,10 +369,47 @@ const handleMsgServiceToggle = async (type,userId) => {
       <p><strong>Phone:</strong> {profileData?.phone}</p>
       <p><strong>Email:</strong> {profileData?.email}</p>
       <p><strong>Role:</strong> {profileData?.role}</p>
-      {profileData?.companyBillingName && (
-        <p><strong>Company Billing Name:</strong> {profileData?.companyBillingName}</p>
+     {/* Display Addresses */}
+    <p><strong>Addresses:</strong></p>
+    <ul className="profile-address-list">
+      {profileData?.addresses?.length ? (
+        profileData.addresses.map((address, index) => <li key={index}>{address}</li>)
+      ) : (
+        <li>No Addresses</li>
       )}
-      <p><strong>Address:</strong> {`${profileData?.address?.street}, ${profileData?.address?.city}, ${profileData?.address?.state}, ${profileData?.address?.postalCode}, ${profileData?.address?.country}`}</p>
+    </ul>
+
+    {/* Check userRoles from localStorage */}
+    {(() => {
+    const userRoles = JSON.parse(localStorage.getItem("userRoles")) || [];
+
+    // Check if profileData.role exists in any roleName inside userRoles
+    const canViewBrandsAndCompany = userRoles.some(role => role.roleName === profileData?.role);
+
+    return canViewBrandsAndCompany ? (
+        <>
+            {/* Display Brands */}
+            <p><strong>Brands:</strong></p>
+            <ul className="profile-brand-list">
+                {profileData?.brands?.length ? (
+                    profileData.brands.map((brand, index) => <li key={index}>{brand}</li>)
+                ) : (
+                    <li>No Brands</li>
+                )}
+            </ul>
+
+            {/* Display Company Billing Name */}
+            <p><strong>Company Billing Name:</strong></p>
+            <ul className="profile-company-list">
+                {profileData?.companyBillingName?.length ? (
+                    profileData.companyBillingName.map((name, index) => <li key={index}>{name}</li>)
+                ) : (
+                    <li>No Company Billing Name</li>
+                )}
+            </ul>
+        </>
+    ) : null;
+})()}
     </div>
   </>
 ) : (
@@ -438,74 +478,72 @@ const handleMsgServiceToggle = async (type,userId) => {
       <p><strong>Role:</strong> {profileData?.role}</p>
 
     </div>
-    {profileData?.companyBillingName && (
-      <div className="profile-details-row">
-        <div className="profile-detail-label">Company Billing Name:</div>
-        <input
-          type="text"
-          value={profileData?.companyBillingName || ''}
-          onChange={(e) => setProfileData({ ...profileData, companyBillingName: e.target.value })}
-          className="profile-detail-input"
-          placeholder="Company Billing Name"
-        />
-      </div>
-    )}
-    <div className="profile-address-form">
-      <div className="profile-address-row">
-        <label className="profile-address-label">Street:</label>
-        <input
-          type="text"
-          value={profileData?.address?.street || ''}
-          onChange={(e) => setProfileData({ ...profileData, address: { ...profileData.address, street: e.target.value } })}
-          className="profile-address-input"
-          placeholder="Street"
-        />
-      </div>
+   
 
-      <div className="profile-address-row">
-        <label className="profile-address-label">City:</label>
-        <input
-          type="text"
-          value={profileData?.address?.city || ''}
-          onChange={(e) => setProfileData({ ...profileData, address: { ...profileData.address, city: e.target.value } })}
-          className="profile-address-input"
-          placeholder="City"
-        />
-      </div>
-
-      <div className="profile-address-row">
-        <label className="profile-address-label">State:</label>
-        <input
-          type="text"
-          value={profileData?.address?.state || ''}
-          onChange={(e) => setProfileData({ ...profileData, address: { ...profileData.address, state: e.target.value } })}
-          className="profile-address-input"
-          placeholder="State"
-        />
-      </div>
-
-      <div className="profile-address-row">
-        <label className="profile-address-label">Postal Code:</label>
-        <input
-          type="text"
-          value={profileData?.address?.postalCode || ''}
-          onChange={(e) => setProfileData({ ...profileData, address: { ...profileData.address, postalCode: e.target.value } })}
-          className="profile-address-input"
-          placeholder="Postal Code"
-        />
-      </div>
-
-      <div className="profile-address-row">
-        <label className="profile-address-label">Country:</label>
-        <input
-          type="text"
-          value={profileData?.address?.country || ''}
-          onChange={(e) => setProfileData({ ...profileData, address: { ...profileData.address, country: e.target.value } })}
-          className="profile-address-input"
-          placeholder="Country"
-        />
-      </div>
+    {/* Edit Addresses */}
+      {/* Edit Addresses */}
+      <div>
+  <h3>Addresses</h3>
+  {profileData?.addresses?.map((address, index) => (
+    <div key={index} className="modal-option-row">
+      <input 
+        type="text" 
+        value={address ?? ""} // Ensure controlled input
+        onChange={(e) => handleChange(e, 'addresses', index)} 
+      />
+      <button type="button" onClick={() => handleDeleteItem('addresses', index)}>Delete</button>
     </div>
+  ))}
+  <button type="button" onClick={() => handleAddItem('addresses')}>Add Address</button>
+</div>
+
+{/* Edit Brands & Company Billing Names */}
+{(() => {
+    const userRoles = JSON.parse(localStorage.getItem("userRoles")) || [];
+    
+    // Check if the user's role exists in userRoles
+    const canEditBrandsAndCompany = userRoles.some(role => role.roleName === profileData?.role);
+
+    if (!canEditBrandsAndCompany) return null; // Prevent rendering if not authorized
+
+    return (
+        <>
+            <div>
+                <h3>Brands</h3>
+                {profileData?.brands?.map((brand, index) => (
+                    <div key={index} className="modal-option-row">
+                        <input 
+                          type="text" 
+                          value={brand ?? ""} // Ensure controlled input
+                          onChange={(e) => handleChange(e, 'brands', index)} 
+                        />
+                        <button type="button" onClick={() => handleDeleteItem('brands', index)}>Delete</button>
+                    </div>
+                ))}
+                <button type="button" onClick={() => handleAddItem('brands')}>Add Brand</button>
+            </div>
+
+            <div>
+                <h3>Company Billing Names</h3>
+                {profileData?.companyBillingName?.map((name, index) => (
+                    <div key={index} className="modal-option-row">
+                        <input 
+                          type="text" 
+                          value={name ?? ""} // Ensure controlled input
+                          onChange={(e) => handleChange(e, 'companyBillingName', index)} 
+                        />
+                        <button type="button" onClick={() => handleDeleteItem('companyBillingName', index)}>Delete</button>
+                    </div>
+                ))}
+                <button type="button" onClick={() => handleAddItem('companyBillingName')}>Add Billing Name</button>
+            </div>
+        </>
+    );
+})()}
+
+
+
+     
 
     <div className="profile-actions">
     <button 
@@ -536,21 +574,6 @@ const handleMsgServiceToggle = async (type,userId) => {
   </div>
 )}
 
-{/* Display success message */}
-{successMessage && (
-  <div
-    style={{
-      color: 'green',
-      backgroundColor: '#e6ffe6',
-      padding: '10px',
-      borderRadius: '5px',
-      marginBottom: '15px',
-      textAlign: 'center',
-    }}
-  >
-    {successMessage}
-  </div>
-)}
 
 <div className="form-group">
   <label htmlFor="email"></label>
@@ -559,7 +582,7 @@ const handleMsgServiceToggle = async (type,userId) => {
     id="login-password"
     name="email"
     className="login-input"
-    value={profileData?.email}
+    value={profileData?.email || ""}
     required
     
   />
@@ -592,6 +615,13 @@ const handleMsgServiceToggle = async (type,userId) => {
   {updateMessage && <span className="update-message">{updateMessage}</span>}
 </div><br/><br/><br/>
        </div>
+        {/* Display error and success messages */}
+      {errorMessage && (
+        <ManageUserError errorMessage={errorMessage} onClose={() => setErrorMessage('')} />
+      )}
+      {successMessage && (
+        <ManageUserSuccess successMessage={successMessage} onClose={() => setSuccessMessage('')} />
+      )}
      </div>
    );
   

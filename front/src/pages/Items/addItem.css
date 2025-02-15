@@ -155,3 +155,69 @@ hr {
     font-size: 16px;
   }
 }
+/* Style for the search container */
+.ItemForm-search-container {
+  margin-bottom: 20px;
+}
+
+.ItemForm-search-input {
+  padding: 8px;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.ItemForm-search-button {
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  font-size: 16px;
+}
+
+/* Container for the user cards */
+.ItemForm-user-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px; /* Adjust the height according to your preference */
+  overflow-y: auto; /* Make the cards scrollable */
+}
+
+/* Style for individual user card */
+.ItemForm-user-card {
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 300px; /* Adjust the width as necessary */
+}
+
+/* Style for the name */
+.ItemForm-user-name {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Style for the phone number */
+.ItemForm-user-phone {
+  font-size: 16px;
+  color: blue; /* Blue color for phone number */
+}
+
+/* Style for the user ID */
+.ItemForm-user-id {
+  font-size: 18px;
+  color: #444; /* Darker color for the user ID */
+}
+
+/* No users found message */
+.ItemForm-no-users {
+  font-size: 18px;
+  color: #777;
+  text-align: center;
+}

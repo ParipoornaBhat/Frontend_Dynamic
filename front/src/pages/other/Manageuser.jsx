@@ -10,20 +10,21 @@ import Highlight from 'react-highlight-words';
 import styled from 'styled-components';
 
 const ManageUsers = () => {
-  const [activeTab, setActiveTab] = useState('Employee');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sortOption, setSortOption] = useState('name-asc');
-  const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
-  const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
   const [menuOpen, setMenuOpen] = useState(null);  // Track which user's menu is open
-  const [errorMessage, setErrorMessage] = useState(''); // Track error message
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [isMProfileOpen, setIsProfileOpen] = useState(false);  
   const [isMProfileVisible, setIsProfileVisible] = useState(false);
-  
+  const [currentPage, setCurrentPage] = useState(1);
+const [totalPages, setTotalPages] = useState(0);
+const [isLoading, setIsLoading] = useState(false);
+const [users, setUsers] = useState([]);
+const [errorMessage, setErrorMessage] = useState("");
+const [searchQuery, setSearchQuery] = useState("");
+const [sortOption, setSortOption] = useState("name-asc");
+const [activeTab, setActiveTab] = useState("Employee");  // or "User"
+
   const handleMProfileToggle = () => {
     setIsProfileVisible(!isMProfileVisible);  // Toggle visibility for the profile
   };
@@ -79,7 +80,7 @@ const ManageUsers = () => {
   const employeeRoles = JSON.parse(localStorage.getItem('employeeRoles')) || [];
   const userRoles = JSON.parse(localStorage.getItem('userRoles')) || [];
   
-  const fetchUsers = async () => {
+ /* const fetchUsers = async () => {
     setIsLoading(true);
     setLoadingMessage('Loading users...');
     const url =
@@ -99,13 +100,56 @@ const ManageUsers = () => {
       setErrorMessage('Failed to load users.'); // Set error message
       console.error('Error fetching users:', error);
     }
+  };*/
+  const fetchUsers = async () => {
+    setIsLoading(true);
+    setLoadingMessage('Loading users...');
+    // Build query params for search, sort, and pagination
+    const queryParams = new URLSearchParams({
+      search: searchQuery,      // The search query for filtering
+      sort: sortOption,        // Sorting option: 'name-asc', 'name-desc', 'role-asc', etc.
+      page: currentPage,       // Current page for pagination
+      limit: 10,               // Number of results per page
+    });
+  
+    const url = activeTab === 'Employee'
+      ? `${import.meta.env.VITE_BASE_URL}/manage/GetAllEmployees/emp?${queryParams.toString()}`
+      : `${import.meta.env.VITE_BASE_URL}/manage/GetAllUsers/user?${queryParams.toString()}`;
+  
+    try {
+      const response = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+  
+      // Check if the response contains 'users' or 'employees' and update state accordingly
+      if (activeTab === 'Employee') {
+        // For employees
+        setUsers(response.data.employees); // Make sure to set employees data
+      } else {
+        // For users
+        setUsers(response.data.users); // Make sure to set users data
+      }
+  
+      // Set pagination data
+      setTotalPages(response.data.totalPages); // Total number of pages
+      setCurrentPage(response.data.currentPage); // Current page info
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      setUsers([]); // Clear users (or employees) on error
+      setErrorMessage('Failed to load users.');
+      console.error('Error fetching users:', error);
+    }
   };
-
+  
+  
+  
+  
   useEffect(() => {
-    fetchUsers();
-  }, [activeTab]);
+    fetchUsers(); // Call fetchUsers function whenever dependencies change
+  }, [activeTab, currentPage, searchQuery, sortOption]); 
 
-  useEffect(() => {
+ /*useEffect(() => {
     let sortedUsers = [...users];
 
     sortedUsers.sort((a, b) => {
@@ -127,11 +171,21 @@ const ManageUsers = () => {
     });
 
     setFilteredUsers(filtered);
-  }, [searchQuery, sortOption, users]);
+  }, [searchQuery, sortOption, users]);*/
 
 // Keep the menuRef logic as is to manage the outside click listener for closing the menu
 
+const handlePrevious = () => {
+  if (currentPage > 1) {
+    setCurrentPage(currentPage - 1);
+  }
+};
 
+const handleNext = () => {
+  if (currentPage < totalPages) {
+    setCurrentPage(currentPage + 1);
+  }
+};
 
 
 
@@ -265,15 +319,16 @@ const handleRoleChange = async (userId, newRole) => {
 
   const getRoles = () => (activeTab === 'Employee' ? employeeRoles : userRoles);
 
-  
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setCurrentPage(1);  // Reset the page to 1 when switching tabs
+  };
 
 
 
 
 
   return (
-
-
     <div className="manageusers-container">
       {/* Other components and JSX */}
       
@@ -284,18 +339,18 @@ const handleRoleChange = async (userId, newRole) => {
 
       {/* Rest of your JSX */}
       <div className="manageusers-tabs">
-        <button
-          onClick={() => setActiveTab('Employee')}
-          className={activeTab === 'Employee' ? 'manageuser-active-tab' : 'manageuser-inactive-tab'}
-        >
-          Employees
-        </button>
-        <button
-          onClick={() => setActiveTab('User')}
-          className={activeTab === 'User' ? 'manageuser-active-tab' : 'manageuser-inactive-tab'}
-        >
-          Users
-        </button>
+      <button
+        onClick={() => handleTabChange('Employee')}
+        className={activeTab === 'Employee' ? 'manageuser-active-tab' : 'manageuser-inactive-tab'}
+      >
+        Employees
+      </button>
+      <button
+        onClick={() => handleTabChange('User')}
+        className={activeTab === 'User' ? 'manageuser-active-tab' : 'manageuser-inactive-tab'}
+      >
+        Users
+      </button>
         <StyledWrapper>
   <button type="button" className="manageuser-1-button" onClick={openModal}>
     <span className="manageuser-1-button__text">
@@ -314,26 +369,27 @@ const handleRoleChange = async (userId, newRole) => {
       </div>
 
       <div className="manageusers-header">
-        <input
-          type="text"
-          placeholder="Search by Name or Phone"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="manageusers-search"
-        />
-        <select
-          onChange={(e) => setSortOption(e.target.value)}
-          value={sortOption}
-          className="manageusers-sort-dropdown"
-        >
-          <option value="name-asc">Name (A-Z)</option>
-          <option value="name-desc">Name (Z-A)</option>
-          <option value="role-asc">Role (A-Z)</option>
-          <option value="role-desc">Role (Z-A)</option>
-          <option value="date-asc">Date (Oldest)</option>
-          <option value="date-desc">Date (Newest)</option>
-        </select>
-        
+      <input
+    type="text"
+    placeholder="Search by Name or Phone"
+    value={searchQuery}  // Linked to searchQuery state
+    onChange={(e) => setSearchQuery(e.target.value)}  // Update searchQuery state on change
+    className="manageusers-search"
+  />
+
+  {/* Sorting Dropdown */}
+  <select
+    onChange={(e) => setSortOption(e.target.value)}  // Update sortOption state on change
+    value={sortOption}  // Linked to sortOption state
+    className="manageusers-sort-dropdown"
+  >
+    <option value="name-asc">Name (A-Z)</option>
+    <option value="name-desc">Name (Z-A)</option>
+    <option value="role-desc">Role (A-Z)</option>
+    <option value="role-asc">Role (Z-A)</option>
+    <option value="date-asc">Date (Oldest)</option>
+    <option value="date-desc">Date (Newest)</option>
+  </select>
 
       </div>
 
@@ -341,7 +397,7 @@ const handleRoleChange = async (userId, newRole) => {
       
 
       <div className="manageusers-cards-container">
-        {filteredUsers.map((user) => (
+        {users.map((user) => (
           <div key={user._id} className="manageusers-card">
             <div className="m-profile-pic">
             <img 
@@ -421,8 +477,51 @@ const handleRoleChange = async (userId, newRole) => {
         ))}
       </div>
       
-      
-   
+     
+
+      <div 
+      className="manageuser-pagination-container" 
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}
+    >
+      <button
+        onClick={handlePrevious}
+        disabled={isLoading || currentPage === 1}
+        className="manageuser-pagination-button"
+        style={{
+          padding: '5px 10px',
+          cursor: isLoading || currentPage === 1 ? 'not-allowed' : 'pointer',
+          backgroundColor: isLoading || currentPage === 1 ? '#ddd' : '#4CAF50',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '5px',
+        }}
+      >
+        Previous
+      </button>
+
+      <span 
+        className="manageuser-pagination-info" 
+        style={{ fontSize: '16px', fontWeight: '500' }}
+      >
+        Page {currentPage} of {totalPages}
+      </span>
+
+      <button
+        onClick={handleNext}
+        disabled={isLoading || currentPage === totalPages}
+        className="manageuser-pagination-button"
+        style={{
+          padding: '5px 10px',
+          cursor: isLoading || currentPage === totalPages ? 'not-allowed' : 'pointer',
+          backgroundColor: isLoading || currentPage === totalPages ? '#ddd' : '#4CAF50',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '5px',
+        }}
+      >
+        Next
+      </button>
+    </div>
   
   </div>
   );

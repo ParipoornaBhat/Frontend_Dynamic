@@ -1,0 +1,135 @@
+/* Modal Overlay */
+.formsetModal-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  /* Modal Container */
+  .formsetModal-modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  /* Modal Title */
+  .formsetModal-modal h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Form Section */
+  .formsetModal-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Material Title */
+  .formsetModal-modal h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #555;
+  }
+  
+  /* Option Row (for each option in a material) */
+  .formsetModal-modal .option-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Input for options */
+  .formsetModal-modal input[type="text"] {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 80%;
+  }
+  
+  /* Add Option Button */
+  .formsetModal-modal button[type="button"] {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  /* Add Option Button Hover Effect */
+  .formsetModal-modal button[type="button"]:hover {
+    background-color: #45a049;
+  }
+  
+  /* Delete Button */
+  .formsetModal-modal .option-row button {
+    padding: 6px 10px;
+    font-size: 12px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  /* Delete Button Hover Effect */
+  .formsetModal-modal .option-row button:hover {
+    background-color: #e53935;
+  }
+  
+  /* Modal Actions (Close & Save buttons) */
+  .formsetModal-modal .modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  /* Close Button */
+  .formsetModal-modal .modal-actions button[type="button"]:first-child {
+    background-color: #f1f1f1;
+    color: #333;
+  }
+  
+  /* Save Button */
+  .formsetModal-modal .modal-actions button[type="button"]:last-child {
+    background-color: #2196F3;
+    color: white;
+  }
+  
+  /* Success & Error Messages */
+  .formsetModal-modal .success-message,
+  .formsetModal-modal .error-message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+  }
+  
+  .formsetModal-modal .success-message {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .formsetModal-modal .error-message {
+    background-color: #f44336;
+    color: white;
+  }
+  
