@@ -563,7 +563,7 @@ const handleSaveChanges = async () => {
           <label htmlFor="email"></label>
           <input
             type="hidden"
-            id="login-password"
+            id="login-email2"
             name="email"
             className="login-input"
             value={profileData?.email || ""}

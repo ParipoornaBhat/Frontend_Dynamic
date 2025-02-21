@@ -99,7 +99,8 @@ function Login() {
             <label htmlFor="password" className="login-label"></label>
             <div className="login-password-container">
            <input
-              type={showPassword ? "text" : "password"}                id="login-password"
+              type={showPassword ? "text" : "password"}               
+              id="login-password"
               className="login-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

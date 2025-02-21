@@ -115,7 +115,18 @@
 /* Inputs and Selects - Compact and Styled */
 .ItemForm-form-input,
 .ItemForm-form-select {
-  width: 150px;
+  width: 200px;
+  padding: 8px;
+  border: 2px solid #666;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: bold;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease-in-out;
+  outline: none;
+}
+.ItemForm-form-input{
+  width: 180px;
   padding: 8px;
   border: 2px solid #666;
   border-radius: 4px;
@@ -156,6 +167,10 @@
   .ItemForm-form-input,
   .ItemForm-form-select {
     width: 100%;
+  }
+  .ItemForm-form-input
+   {
+    width: 95%;
   }
 }
 
@@ -501,3 +516,195 @@
   cursor: not-allowed;
 
 }
+
+
+
+
+
+
+
+
+
+/* Main Container */
+.ItemLists-container {
+  padding: 20px;
+  margin-bottom: 50px;
+}
+
+/* Arranging Cards in a Row */
+.ItemLists {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+@media (max-width: 768px) {
+  .ItemLists {
+    justify-content: center;
+  }
+}
+
+/* Horizontal Card Layout */
+.ItemLists-card {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  padding-bottom: 25px;
+  background: #ffffff;
+  color: #000000;
+  width: 255px;
+  height: 400px;
+  position: relative;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease-in-out;
+}
+
+.ItemLists-card:hover {
+  transform: scale(1.02);
+}
+
+/* Image Container */
+/* Image Container */
+/* Image Container */
+.ItemLists-imageContainer {
+  position: relative;
+  width: 100%;
+  height: 250px; /* Uniform height */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+}
+
+/* Image Styling */
+.ItemLists-image {
+  width: 100%;
+  height: 100%; /* Adjusted to match container height */
+  object-fit: contain; /* Ensures image is fully visible without distortion */
+}
+
+/* No Image Placeholder */
+.ItemLists-noImage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #555;
+  color: #ccc;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+/* Navigation Buttons */
+.ItemLists-prevBtn, .ItemLists-nextBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.ItemLists-prevBtn:hover, .ItemLists-nextBtn:hover {
+  background: rgba(97, 73, 73, 0.3);
+}
+
+.ItemLists-prevBtn {
+  left: 5px;
+}
+
+.ItemLists-nextBtn {
+  right: 5px;
+}
+
+/* Label on Image (Angled at 120°) */
+.ItemLists-banner {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  width:130px;
+  background: red;
+  color: rgb(0, 0, 0);
+  padding: 5px ;
+  transform: rotate(0deg);
+  font-weight: bold;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+/* Details Container - Fixed Height & Alignment */
+.ItemLists-details {
+  margin-left: 10px;
+ height: 100px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px; /* Minimal spacing between lines */
+  padding: 5px; /* Compact padding */
+  overflow: hidden;
+}
+
+/* Ensuring All Text Aligns Properly */
+.ItemLists-details p {
+  font-size: 13px;
+  font-weight: bold;
+  margin: 0; /* No extra margin */
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Small spacing between label and value */
+  color: #333;
+}
+
+/* Label (Boldest) & Value (Bold) */
+.ItemLists-details p strong {
+  font-weight: bolder;
+  color: #000;
+  min-width: 80px; /* Align all labels evenly */
+  display: inline-block;
+}
+
+/* Item Name - Stand Out */
+.ItemLists-itemName {
+  font-size: 18px;
+  font-weight: bolder;
+  margin-bottom: 2px;
+  color: #001660;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Created At - Lighter Color for Less Emphasis */
+.ItemLists-date {
+  font-size: 12px;
+  color: #666;
+}
+
+
+.ItemLists-banner {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #000000;
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+
+/* Make sure text doesn't overflow */
+
+/* Reduce padding to prevent unnecessary space */
+
+/* Mobile Friendly */
+

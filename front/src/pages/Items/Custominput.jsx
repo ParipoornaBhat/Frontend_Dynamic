@@ -21,21 +21,28 @@ const CustomSelect = ({ section, field, label, options, BOPP, handleInputChange,
     <div className="ItemForm-Job-select">
       <label className="ItemForm-form-label">{label} :</label>
       <select
-        value={BOPP[section]?.[field] || ""}
-        onChange={(e) => handleInputChange(section, field, e.target.value)}
+        value={BOPP[section]?.[field] ?? ""}
+        onChange={(e) =>
+          handleInputChange(
+            section,
+            field,
+            e.target.value === "true" ? true : e.target.value === "false" ? false : e.target.value
+          )
+        }
         className="ItemForm-form-select"
-        {...(required && { required: true })} // Apply `required` only if passed
+        {...(required && { required: true })}
       >
         <option value="">Select an option</option>
         {options.map((option, index) => (
           <option key={index} value={option}>
-            {option}
+            {option === true ? "Yes" : option === false ? "No" : option}
           </option>
         ))}
       </select>
     </div>
   );
 };
+
 
 const RemarkCheck2 = ({ section, label, isItemInfo, BOPP, handleInputChange, required }) => (
   <div className="ItemForm-Job-remarkcheck">
