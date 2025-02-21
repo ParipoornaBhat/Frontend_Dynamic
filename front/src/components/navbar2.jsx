@@ -273,11 +273,13 @@ return { checkJWTValidity };
                         <Link to="/manageusers" onClick={checkJWTValidity}>Manage Users</Link>
                       </li>
                     )}
-                    {(actions.some(action => action.canView && (action.name === "ItemManagementBOPP" || action.name === "ItemManagementPET"))) && (
                       <li key="manage-items">
                         <Link to="/itemmanagement" onClick={checkJWTValidity}>Manage Items</Link>
                       </li>
-                    )}
+                      <li key="manage-Order">
+                        <Link to="/ordermanage" onClick={checkJWTValidity}>Manage Orders</Link>
+                      </li>
+                    
                   </>
                 )}
                 <li>

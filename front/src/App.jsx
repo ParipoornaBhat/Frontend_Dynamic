@@ -11,7 +11,7 @@ import NotFound from './pages/general/NotFound.jsx';
 import ForgotPassword from './pages/ForgotPassword';
 import ManageUsers from './pages/other/Manageuser.jsx';
 import ItemManage from './pages/Items/AddItems.jsx';
-
+import ManageOrders from './pages/OrderPages/ManageOrders.jsx'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -51,11 +51,11 @@ function App() {
         <Route path="/manageusers" element={<ManageUsers />} />
         <Route path="/forgotpassword" element={<ForgotPassword />} />
         <Route path="/changepassword/:token" element={<ChangePassword />} />
-        <Route path="/ordermanagement" element={<Login />} />
+        <Route path="/ordermanage" element={<ManageOrders />} />
         <Route path="/a/notification" element={<Login />} />
         <Route path="/itemmanagement" element={<ItemManage />} />
         <Route path="/taskmanage" element={<Login />} />
-
+        
 
 
         <Route path="*" element={<NotFound />} />
