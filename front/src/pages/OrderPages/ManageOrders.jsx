@@ -278,7 +278,7 @@ const fetchOrders = async () => {
 </div>
 
 
-<OrderList orders={orders} isEmployee={isEmployee} updateOrderStatus={updateOrderStatus} printOrder={printOrder} />
+<OrderList orders={orders} isEmployee={isEmployee} updateOrderStatus={updateOrderStatus} printOrder={printOrder} setOrders={setOrders}/>
 
 
 

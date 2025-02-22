@@ -1,13 +1,89 @@
-import { useState } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import Highlighter from "react-highlight-words";
+import ManageUserError from '../other/ErrorMessage'; // Import the ErrorMessage component
+import ManageUserSuccess from '../other/SuccessMessage'; // Import the ErrorMessage component
+import axios from 'axios';
 
-const OrderList = ({ orders, isEmployee, updateOrderStatus, printOrder }) => {
+const OrderList = ({ orders, isEmployee, updateOrderStatus, printOrder,setOrders }) => {
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [orderStatusMap, setOrderStatusMap] = useState({});
   const [statusChanged, setStatusChanged] = useState({});
   const [imageIndex, setImageIndex] = useState({}); // Tracks the current image index for each order
+  const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(''); // Track error message
+    const [successMessage, setSuccessMessage] = useState(''); // Track error message
+    const token = localStorage.getItem('token');
 
-  const toggleExpand = (orderId) => {
+    const handleSaveStatus = async (orderId) => {
+      if (!orderStatusMap[orderId]) {
+        setErrorMessage("No change in status");
+        return; // No status change, do nothing
+      }
+      setLoading(true);
+      setErrorMessage("");
+      setSuccessMessage("");
+  
+      try {
+          const baseUrl = import.meta.env.VITE_BASE_URL;
+          const endpoint = `/emp/updatestatus/${orderId}`;
+  
+          const response = await axios.post(`${baseUrl}${endpoint}`, 
+              { newStatus: orderStatusMap[orderId] },
+              {
+                  headers: {
+                      Authorization: `Bearer ${token}`,
+                      "Content-Type": "application/json",
+                  },
+              }
+          );
+  
+          if (response.status === 200) {
+              setSuccessMessage(`✅ Status updated successfully!`);
+              setOrders(prevOrders =>
+                  prevOrders.map(order =>
+                      order._id === orderId ? { ...order, OrderStatus: orderStatusMap[orderId] } : order
+                  )
+              );
+              setOrderStatusMap(prev => ({ ...prev, [orderId]: undefined })); // Reset local state
+          } else {
+              throw new Error("Unexpected server response.");
+          }
+      } catch (error) {
+          console.error("❌ API Error:", error);
+          let errorMsg = "❌ An unknown error occurred.";
+  
+          if (error.response) {
+              switch (error.response.status) {
+                  case 400:
+                      errorMsg = "⚠️ Bad Request: " + (error.response.data.message || "Check your input.");
+                      break;
+                  case 401:
+                      errorMsg = "🔒 Unauthorized: Please log in again.";
+                      break;
+                  case 403:
+                      errorMsg = "🚫 Forbidden: You don't have permission.";
+                      break;
+                  case 404:
+                      errorMsg = "🔍 Order Not Found.";
+                      break;
+                  case 500:
+                      errorMsg = "🛑 Server Error: Try again later.";
+                      break;
+                  default:
+                      errorMsg = "❌ API Error: " + (error.response.data.message || "Something went wrong.");
+              }
+          } else if (error.request) {
+              errorMsg = "📡 Network Error: Please check your connection.";
+          } else {
+              errorMsg = "⚠️ Request Failed: " + error.message;
+          }
+  
+          setErrorMessage(errorMsg);
+      } finally {
+          setLoading(false);
+      }
+  };
+    const toggleExpand = (orderId) => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
 
@@ -24,23 +100,19 @@ const OrderList = ({ orders, isEmployee, updateOrderStatus, printOrder }) => {
       [orderId]: (prev[orderId] - 1 + images.length) % images.length,
     }));
   };
-
-
   const handleStatusChange = (orderId, newStatus) => {
-    setOrderStatusMap((prevStatusMap) => ({
-      ...prevStatusMap,
-      [orderId]: newStatus
+    setOrderStatusMap(prev => ({
+        ...prev,
+        [orderId]: newStatus
     }));
   };
+
+
+
   
 
-  const handleSaveStatus = (orderId) => {
-    if (orderStatusMap[orderId]) {
-      updateOrderStatus(orderId, orderStatusMap[orderId]);
-      setStatusChanged((prev) => ({ ...prev, [orderId]: false }));
-      
-    }
-  };
+
+ 
  
   
 
@@ -53,7 +125,9 @@ const OrderList = ({ orders, isEmployee, updateOrderStatus, printOrder }) => {
     "Completed",
   ];
 
-  return (<>      <style>{`
+  return (<>  
+    
+   <style>{`
     .OrderLists-container {
       padding: 20px;
     }
@@ -373,7 +447,12 @@ const OrderList = ({ orders, isEmployee, updateOrderStatus, printOrder }) => {
 
     `}
   </style>
-
+  {errorMessage && (
+    <ManageUserError errorMessage={errorMessage} onClose={() => setErrorMessage("")} />
+  )}
+  {successMessage && (
+    <ManageUserSuccess successMessage={successMessage} onClose={() => setSuccessMessage("")} />
+  )}
   <div className="OrderLists-container">
   {orders.length > 0 ? (
     <div className="OrderLists-list">
@@ -419,24 +498,25 @@ const OrderList = ({ orders, isEmployee, updateOrderStatus, printOrder }) => {
                   {isEmployee ? (
                     <>
                       <select
-                        value={orderStatusMap[order._id] || order.OrderStatus}
-                        onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                      >
-                        {statusOptions.map((status) => (
-                          <option key={status} value={status}>{status}</option>
-                        ))}
-                      </select>
-                      <button
-                        className={`OrderLists-save-btn ${
-                          !orderStatusMap[order._id] || orderStatusMap[order._id] === order.OrderStatus
-                            ? "disabled"
-                            : "enabled"
-                        }`}
-                        onClick={() => handleSaveStatus(order._id)}
-                        disabled={!orderStatusMap[order._id] || orderStatusMap[order._id] === order.OrderStatus}
-                      >
-                        Save
-                      </button>
+  value={orderStatusMap[order._id] ?? order.OrderStatus}
+  onChange={(e) => handleStatusChange(order._id, e.target.value)}
+>
+  {statusOptions.map((status) => (
+    <option key={status} value={status}>{status}</option>
+  ))}
+                        </select>
+
+                        <button
+                          className={`OrderLists-save-btn ${
+                            orderStatusMap[order._id] === undefined || orderStatusMap[order._id] === order.OrderStatus
+                              ? "disabled"
+                              : "enabled"
+                          }`}
+                          onClick={() => handleSaveStatus(order._id)}
+                        >
+                          Save
+                        </button>
+
                       <button className="OrderLists-print-btn" onClick={() => printOrder(order)}>Print</button>
                     </>
                   ) : (
