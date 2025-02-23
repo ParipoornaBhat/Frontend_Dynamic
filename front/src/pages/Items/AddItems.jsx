@@ -53,9 +53,7 @@ const closeModal = () => {
   // Function to go to the previous image
 
 
-      const handleEditClick = () => {
-        setShowModal(true); // Show the modal
-      };
+    
       const handleADDUSEREditClick = () => {
         setADDUSERShowModal(true); // Show the modal
       };
@@ -265,14 +263,7 @@ const CustomSelect = ({ section, field, label, options }) => (
         >
           PET
         </button>
-        {isEmployee && (
-  <button           
-    className='manageuser-active-tab' 
-    onClick={handleEditClick}
-  >
-    Edit Options
-  </button>
-)}
+     
 
 {isEmployee && (
   <StyledWrapper>

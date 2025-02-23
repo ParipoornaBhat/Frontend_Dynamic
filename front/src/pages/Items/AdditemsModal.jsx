@@ -514,12 +514,31 @@ try {
   return (
     <>
     
+ 
+
 
     
 
       {/* Modal structure using Styled Components */}
       <StyledOverlay>
         <StyledModal>
+        <button           
+    className='manageuser-active-tab' 
+    onClick={handleEditClick}
+  >
+    Edit Options
+  </button>
+  {showModal && (
+          <SettingModal
+            editFormData={editFormData}
+            onClose={handleCloseModal} // Close modal
+            onSave={() => {
+              setIsOptionsFetched(false);
+              console.log("onSave is called");  // Log to check if it's triggered
+             // Set success message
+            }} 
+          />
+        )}
         {activeTab === "BOPP" ? 
         (<>  {/* Display error and success messages */}
           {errorMessage && (

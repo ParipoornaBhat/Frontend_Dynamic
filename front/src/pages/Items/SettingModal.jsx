@@ -8,7 +8,7 @@ const Modal = ({ editFormData, onClose, onSave }) => {
   const [formData, setFormData] = useState(editFormData); // Form data initialized with passed data
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-
+  const [isOptionsFetched, setIsOptionsFetched] = useState(false); // Track if options are fetched
   // Handle adding a new option to a material
   const handleAddOption = (materialName) => {
     const newOption = prompt('Enter a new option:');
@@ -93,42 +93,48 @@ const Modal = ({ editFormData, onClose, onSave }) => {
 
       {/* Modal structure using Styled Components */}
       <StyledOverlay>
-        <StyledModal>
-          <h2>Edit Material Options</h2>
+      <StyledModal>
+  <h2>Edit Material Options</h2>
 
-          {/* Display each material and their options */}
-          <form>
-            {formData.map((material) => (
-              <div key={material.name}>
-                <h3>{material.name}</h3>
-                <div>
-                  {material.options.map((option, optionIndex) => (
-                    <div key={optionIndex} className="formsetModal-option-row">
-                      <input
-                        type="text"
-                        value={option}
-                        name={optionIndex.toString()}
-                        onChange={(e) => handleChange(e, material.name)} // Handle change of option text
-                      />
-                      <button type="button" onClick={() => handleDeleteOption(material.name, option)}>
-                        Delete
-                      </button>
-                    </div>
-                  ))}
+  {/* Display each material and their options */}
+  <form>
+    {Array.isArray(formData) && formData.length > 0 ? (
+      formData.map((material) => (
+        <div key={material.name}>
+          <h3>{material.name}</h3>
+          <div>
+            {Array.isArray(material.options) &&
+              material.options.map((option, optionIndex) => (
+                <div key={optionIndex} className="formsetModal-option-row">
+                  <input
+                    type="text"
+                    value={option}
+                    name={optionIndex.toString()}
+                    onChange={(e) => handleChange(e, material.name)}
+                  />
+                  <button type="button" onClick={() => handleDeleteOption(material.name, option)}>
+                    Delete
+                  </button>
                 </div>
-                <button type="button" onClick={() => handleAddOption(material.name)}>
-                  Add Option
-                </button>
-              </div>
-            ))}
-          </form>
-
-          {/* Modal action buttons */}
-          <div className="formsetModal-modal-actions">
-            <button type="button" onClick={onClose}>Close</button>
-            <button type="button" onClick={handleSave}>Save</button>
+              ))}
           </div>
-        </StyledModal>
+          <button type="button" onClick={() => handleAddOption(material.name)}>
+            Add Option
+          </button>
+        </div>
+      ))
+    ) : (
+      <p>No materials available</p>
+    )}
+  </form>
+
+  {/* Modal action buttons */}
+  <div className="formsetModal-modal-actions">
+    <button type="button" onClick={onClose}>Close</button>
+    <button type="button" onClick={handleSave}>Save</button>
+  </div>
+</StyledModal>
+
       </StyledOverlay>
     </>
   );
